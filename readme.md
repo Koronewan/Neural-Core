@@ -17,7 +17,7 @@ A high-performance, dependency-free C++ framework for Deep Learning and Evolutio
 
 ### 1. Neural Engine from Scratch
 Developed a complete neural network lifecycle without high-level libraries like TensorFlow.
-* **Layer Abstraction:** Implemented a flexible architecture supporting custom layer depth and neuron density. Includes specialized layers such as **Dropout** to mitigate overfitting.
+* **Layer Abstraction:** Implemented a flexible architecture supporting custom layer depth and neuron density. Includes specialized layers such as Dropout to mitigate overfitting.
 * **Activation Functions:** Manual derivation and implementation of Sigmoid, ReLU, and Tanh, along with their respective derivatives for gradient descent.
 * **Weight Initialization:** Multiple initialization strategies including **Glorot (Xavier)**, **He**, and **One**.
 * **Regularization:** Support for **L1 (Lasso)** and **L2 (Ridge)** regularization to improve model generalization.
