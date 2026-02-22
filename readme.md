@@ -4,7 +4,7 @@ A high-performance, dependency-free C++ framework for Deep Learning and Evolutio
 
 ---
 
-## 🛠️ Technical Overview
+## Technical Overview
 
 * **Language:** Modern C++.
 * **Core Paradigm:** Object-Oriented Programming (OOP) with a modular layer-based architecture.
@@ -13,7 +13,7 @@ A high-performance, dependency-free C++ framework for Deep Learning and Evolutio
 
 ---
 
-## 🧠 Key Features & Engineering Challenges
+## Key Features & Engineering Challenges
 
 ### 1. Neural Engine from Scratch
 Developed a complete neural network lifecycle without high-level libraries like TensorFlow.
@@ -41,14 +41,14 @@ In addition to gradient-based learning, the framework includes an implementation
 
 ---
 
-## 📂 Project Structure
+## Project Structure
 
 * `/src`: Core C++ implementation.
 * `/tests`: Unit and integration tests for validating mathematical correctness.
 
 ---
 
-## 👥 Team & Credits
+## Team & Credits
 
 This project was developed by the **UwU Gang**:
 
@@ -58,7 +58,7 @@ This project was developed by the **UwU Gang**:
 
 ---
 
-## 🚀 Usage
+## Usage
 
 1. **Compilation:**
    ```bash
