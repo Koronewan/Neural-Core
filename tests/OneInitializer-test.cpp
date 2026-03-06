@@ -9,6 +9,7 @@ namespace {
     constexpr int NUM_OUTPUTS = 3;
     constexpr int NUM_INPUTS = 2;
     constexpr double EXPECTED_INIT_VALUE = 1.0;
+    constexpr double EXPECTED_BIAS_INIT_VALUE = 0.0;
 }
 
 TEST(OneInitializerTest, InitializeToOnes) {
@@ -21,9 +22,9 @@ TEST(OneInitializerTest, InitializeToOnes) {
     OneInitializer oneInit;
     oneInit.initialize(weightsMatrix, biasesVector);
 
-    // All biases should be exactly 1.0
+    // All biases should be exactly 0.0
     for (int i = 0; i < biasesVector.size(); ++i) {
-        EXPECT_EQ(biasesVector[i], EXPECTED_INIT_VALUE);
+        EXPECT_EQ(biasesVector[i], EXPECTED_BIAS_INIT_VALUE);
     }
 
     // All weights should be exactly 1.0

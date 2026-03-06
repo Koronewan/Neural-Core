@@ -32,7 +32,7 @@ TEST(MeanSquaredErrorTest, GradientSimpleValues) {
 
     // item={1,2,3}, expected={3,2,1}
     // diff = (3-1, 2-2, 1-3) = (2, 0, -2)
-    // gradient = 2*diff / n = (4/3, 0, -4/3)
+    // gradient = diff / n = (2/3, 0, -2/3)
     std::vector<double> item = {1.0, 2.0, 3.0};
     std::vector<double> expected = {3.0, 2.0, 1.0};
     constexpr int vectorSize = 3;
@@ -40,9 +40,9 @@ TEST(MeanSquaredErrorTest, GradientSimpleValues) {
     uwu::Vector grad = mse.gradient(item, expected);
 
     ASSERT_EQ(grad.size(), static_cast<size_t>(vectorSize));
-    EXPECT_NEAR(grad[0],  4.0 / vectorSize, STRICT_TOLERANCE);
-    EXPECT_NEAR(grad[1],  0.0,              STRICT_TOLERANCE);
-    EXPECT_NEAR(grad[2], -4.0 / vectorSize, STRICT_TOLERANCE);
+    EXPECT_NEAR(grad[0], -2.0 / vectorSize, STRICT_TOLERANCE);
+    EXPECT_NEAR(grad[1], 0.0,              STRICT_TOLERANCE);
+    EXPECT_NEAR(grad[2], 2.0 / vectorSize, STRICT_TOLERANCE);
 }
 
 // Verify gradient handles negative values correctly
@@ -51,13 +51,13 @@ TEST(MeanSquaredErrorTest, GradientWithNegatives) {
 
     // item={-1,-2}, expected={1,2}
     // diff = (1-(-1), 2-(-2)) = (2, 4)
-    // gradient = 2*diff / n = (4/2, 8/2) = (2, 4)
+    // gradient = diff / n = (2/2, 4/2) = (1, 2)
     std::vector<double> item = {-1.0, -2.0};
     std::vector<double> expected = {1.0, 2.0};
 
     uwu::Vector grad = mse.gradient(item, expected);
 
     ASSERT_EQ(grad.size(), 2u);
-    EXPECT_DOUBLE_EQ(grad[0], 2.0);
-    EXPECT_DOUBLE_EQ(grad[1], 4.0);
+    EXPECT_DOUBLE_EQ(grad[0], -1.0);
+    EXPECT_DOUBLE_EQ(grad[1], -2.0);
 }

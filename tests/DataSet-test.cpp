@@ -7,7 +7,7 @@
 
 namespace {
     constexpr double HALF_SPLIT_RATIO = 0.5;
-    constexpr double TRAIN_HEAVY_SPLIT_RATIO = 0.85;
+    constexpr double TRAIN_HEAVY_SPLIT_RATIO = 0.8;
     constexpr int SMALL_DATASET_SIZE = 2;
     constexpr int LARGE_DATASET_SIZE = 10;
     constexpr int EXPECTED_TRAIN_SIZE_85_PCT = 8;

@@ -54,6 +54,7 @@ TEST(AdamTest, UpdateWeights)
 
     Adam adam(LEARNING_RATE, BETA1, BETA2, EPSILON);
     AdamState state;
+    state.t = 1.0; // Simulate that this is the first update step (t=1)
     adam.update(gradientMatrix, weightsMatrix, state);
 
     weightsMatrix.iterate([&](double& weight, int row, int col) {

@@ -12,7 +12,7 @@ double Accuracy::compute(const Matrix& predicted, const Matrix& actual)
     double total = static_cast<double>(predicted.size());
 
     for (size_t i = 0; i < predicted.size(); ++i)
-        {
+    {
         // Find the predicted class (argmax)
         size_t predictedClass = std::distance(predicted[i].begin(),
                                               std::max_element(predicted[i].begin(), predicted[i].end()));

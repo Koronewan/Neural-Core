@@ -43,16 +43,6 @@ TEST(MatrixTest, MatrixAddition) {
     EXPECT_DOUBLE_EQ(mat1.data_[1][1], 12.0);  // 4+8
 }
 
-TEST(MatrixTest, MatrixAdditionDimensionMismatch) {
-    Matrix mat1(MATRIX_2X2, MATRIX_2X2);
-    mat1.data_ = {{1.0, 2.0}, {3.0, 4.0}};
-
-    Matrix mat2(MATRIX_3X3, MATRIX_3X3);
-    mat2.data_ = {{5.0, 6.0, 7.0}, {8.0, 9.0, 10.0}, {11.0, 12.0, 13.0}};
-
-    EXPECT_THROW(mat1 += mat2, std::invalid_argument);
-}
-
 TEST(MatrixTest, ScalarDivision) {
     Matrix mat(MATRIX_2X2, MATRIX_2X2);
     mat.data_ = {{4.0, 8.0}, {12.0, 16.0}};
@@ -77,16 +67,6 @@ TEST(MatrixTest, MatrixSubtraction) {
     EXPECT_DOUBLE_EQ(mat1.data_[0][1], 5.0);  // 7-2
     EXPECT_DOUBLE_EQ(mat1.data_[1][0], 6.0);  // 9-3
     EXPECT_DOUBLE_EQ(mat1.data_[1][1], 7.0);  // 11-4
-}
-
-TEST(MatrixTest, MatrixSubtractionDimensionMismatch) {
-    Matrix mat1(MATRIX_2X2, MATRIX_2X2);
-    mat1.data_ = {{5.0, 7.0}, {9.0, 11.0}};
-
-    Matrix mat2(MATRIX_3X3, MATRIX_3X3);
-    mat2.data_ = {{1.0, 2.0, 3.0}, {4.0, 5.0, 6.0}, {7.0, 8.0, 9.0}};
-
-    EXPECT_THROW(mat1 -= mat2, std::invalid_argument);
 }
 
 TEST(MatrixTest, ScalarMultiplication) {

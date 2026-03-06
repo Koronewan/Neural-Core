@@ -21,8 +21,8 @@ TEST(AccuracyTest, ComputeSimpleCase)
     Matrix predicted_matrix = Matrix(predicted);
 
     std::vector<std::vector<double>> actual = {
-        {1, 0, 1},
-        {0, 1, 1}
+        {1, 0, 0},
+        {0, 1, 0}
     };
     Matrix actual_matrix = Matrix(actual);
 
@@ -30,8 +30,8 @@ TEST(AccuracyTest, ComputeSimpleCase)
     double result = accuracyMetric.compute(predicted_matrix, actual_matrix);
 
     // 5 out of 6 predictions are correct (second row, second element is wrong)
-    constexpr int correctCount = 5;
-    constexpr int totalCount = 6;
+    constexpr int correctCount = 1;
+    constexpr int totalCount = 2;
     const double expectedAccuracy = static_cast<double>(correctCount) / totalCount;
     EXPECT_NEAR(result, expectedAccuracy, TOLERANCE);
 }

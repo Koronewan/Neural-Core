@@ -16,8 +16,9 @@ class AdamState: public OptimizerState
     uwu::Vector velocitiesBias;
     Matrix momentumWeights;
     Matrix velocitiesWeights;
-    double t = 0.0;
+
 public:
+    double t = 0.0;
     AdamState() = default;
     friend class Adam;
 };

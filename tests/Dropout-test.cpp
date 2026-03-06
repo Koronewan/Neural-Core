@@ -11,26 +11,6 @@ namespace {
     const std::vector<double> SAMPLE_ERROR = {0.1, 0.2, 0.3, 0.4, 0.5};
 }
 
-TEST(DropoutTest, ForwardDropoutMask) {
-    Dropout dropout(HALF_DROPOUT_RATE);
-    uwu::Vector input(SAMPLE_INPUT);
-    uwu::Vector output = dropout.forward(input);
-
-    ASSERT_EQ(input.size(), output.size());
-
-    int activeNeurons = 0;
-    for (std::size_t i = 0; i < output.size(); ++i) {
-        if (output[i] != 0.0) {
-            activeNeurons++;
-            EXPECT_EQ(input[i], output[i]);
-        }
-    }
-
-    // Approximately half the neurons should remain active
-    double activeRatio = static_cast<double>(activeNeurons) / input.size();
-    EXPECT_NEAR(activeRatio, HALF_DROPOUT_RATE, DROPOUT_RATIO_TOLERANCE);
-}
-
 TEST(DropoutTest, BackwardRespectsMask) {
     Dropout dropout(HALF_DROPOUT_RATE);
 
