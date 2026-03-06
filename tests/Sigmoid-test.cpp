@@ -31,7 +31,8 @@ TEST(SigmoidTest, ActivateFunction)
     Sigmoid sigmoid;
     sigmoid.activate(input);
 
-    for (size_t i = 0; i < input.size(); ++i) {
+    for (size_t i = 0; i < input.size(); ++i) 
+    {
         EXPECT_NEAR(input[i], expectedOutput[i], TOLERANCE);
     }
 }
@@ -52,7 +53,8 @@ TEST(SigmoidTest, DerivativeFunction)
     Sigmoid sigmoid;
     sigmoid.derivative(input);
 
-    for (size_t i = 0; i < input.size(); ++i) {
+    for (size_t i = 0; i < input.size(); ++i) 
+    {
         EXPECT_NEAR(input[i], expectedOutput[i], TOLERANCE);
     }
 }
