@@ -34,14 +34,14 @@ void NeuralNetwork::fit(const DataSet &dataSet, const int epochs, const int batc
     const Matrix trainingLabels = trainingDataSet.getLabels();
     const Matrix validationFeatures = validationDataSet.getFeatures();
     const Matrix validationLabels = validationDataSet.getLabels();
-
+    const int num_batches = std::round(static_cast<double>(trainingDataSet.getItems()) / batchSize) * epochs;
     std::cout << "Starting Fit" << std::endl;
 
     for (int epoch = 0; epoch < epochs; ++epoch)
     {
         auto epochStart = std::chrono::high_resolution_clock::now();
         this->eventManager_.notify("EpochStart");
-        for (int i = 0; i < trainingFeatures.rows() / batchSize; ++i)
+        for (int i = 0; i < num_batches; ++i)
         {
             this->eventManager_.notify("BatchStart");
             for (int j = 0; j < batchSize; j++)
