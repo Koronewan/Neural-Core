@@ -1,0 +1,53 @@
+name: CI
+
+# Triggers: runs on PRs targeting main or refactorization,
+# and on direct pushes to those branches.
+on:
+  pull_request:
+    branches:
+      - main
+      - refactorization
+  push:
+    branches:
+      - main
+      - refactorization
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository (with submodules)
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Configure CMake (Debug with sanitizers)
+        run: cmake -S . -B build -DCMAKE_BUILD_TYPE=Debug
+
+      - name: Build
+        run: cmake --build build --parallel $(nproc)
+
+      - name: Run tests
+        run: ctest --test-dir build --output-on-failure
+
+  valgrind:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository (with submodules)
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Install Valgrind
+        run: sudo apt-get update && sudo apt-get install -y valgrind
+
+      - name: Configure CMake (Valgrind — no sanitizers)
+        run: cmake -S . -B build -DCMAKE_BUILD_TYPE=Valgrind
+
+      - name: Build
+        run: cmake --build build --parallel $(nproc)
+
+      - name: Run tests under Valgrind
+        run: cmake --build build --target valgrind_check
