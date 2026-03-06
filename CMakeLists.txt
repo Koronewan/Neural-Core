@@ -26,7 +26,7 @@ if(CMAKE_BUILD_TYPE STREQUAL "Release")
     set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${OPTIMIZATION_FLAGS}")
 endif()
 
-set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 # Enable OpenMP if available
@@ -38,6 +38,8 @@ if(OpenMP_CXX_FOUND)
 else()
     message(WARNING "OpenMP not found. The project will compile without parallelization.")
 endif()
+
+find_package(TBB REQUIRED)
 
 include_directories(src)
 
