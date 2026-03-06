@@ -17,10 +17,8 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository (with submodules)
+      - name: Checkout repository
         uses: actions/checkout@v4
-        with:
-          submodules: recursive
 
       - name: Configure CMake (Debug with sanitizers)
         run: cmake -S . -B build -DCMAKE_BUILD_TYPE=Debug
@@ -35,10 +33,8 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository (with submodules)
+      - name: Checkout repository
         uses: actions/checkout@v4
-        with:
-          submodules: recursive
 
       - name: Install Valgrind
         run: sudo apt-get update && sudo apt-get install -y valgrind
