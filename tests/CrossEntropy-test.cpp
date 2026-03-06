@@ -5,131 +5,112 @@
 #include "gtest/gtest.h"
 #include "../src/Loss/CrossEntropy.h"
 
+namespace {
+    constexpr double TOLERANCE = 1e-5;
+    constexpr double NEAR_ZERO_PREDICTION = 1e-10;
+    constexpr double CLAMP_GRADIENT_MAGNITUDE = 1e8;
+}
+
 TEST(CrossEntropyTest, GradientComputation)
 {
-    // Valores de entrada (predicción y valor esperado)
-    std::vector<double> itemData = {0.1, 0.9, 0.8};
-    uwu::Vector item = uwu::Vector(itemData);
+    // Predictions and ground truth labels
+    std::vector<double> predictions = {0.1, 0.9, 0.8};
+    uwu::Vector item = uwu::Vector(predictions);
 
-    std::vector<double> expectedItemData = {0.0, 1.0, 0.0};
-    uwu::Vector expectedItem = uwu::Vector(expectedItemData);
+    std::vector<double> labels = {0.0, 1.0, 0.0};
+    uwu::Vector expectedItem = uwu::Vector(labels);
 
-    // Resultado esperado del gradiente
-    std::vector<double> expectedGradientData = {-0.0, -1.1111111, -0.0};  // Ajustar según la fórmula
+    // Expected gradient: -label/prediction for each element
+    // For label=0: gradient=0, For label=1, pred=0.9: gradient=-1/0.9 ~ -1.1111111
+    std::vector<double> expectedGradient = {-0.0, -1.1111111, -0.0};
 
-    // Crear instancia de CrossEntropy
     CrossEntropy lossFunction;
-
-    // Calcular el gradiente
     uwu::Vector computedGradient = lossFunction.gradient(item, expectedItem);
 
-    // Verificar que los valores del gradiente sean correctos con una tolerancia
-    double tolerance = 1e-5;
     for (size_t i = 0; i < computedGradient.size(); ++i) {
-        EXPECT_NEAR(computedGradient[i], expectedGradientData[i], tolerance);
+        EXPECT_NEAR(computedGradient[i], expectedGradient[i], TOLERANCE);
     }
 }
 
-// Test para el gradiente de CrossEntropy con predicciones y valores esperados completamente diferentes
+// Predictions far from ground truth labels
 TEST(CrossEntropyTest, GradientDifferentPredictions)
 {
-    // Valores de entrada (predicción y valor esperado completamente diferentes)
-    std::vector<double> itemData = {0.05, 0.7, 0.2};
-    uwu::Vector item = uwu::Vector(itemData);
+    std::vector<double> predictions = {0.05, 0.7, 0.2};
+    uwu::Vector item = uwu::Vector(predictions);
 
-    std::vector<double> expectedItemData = {1.0, 0.0, 1.0};
-    uwu::Vector expectedItem = uwu::Vector(expectedItemData);
+    std::vector<double> labels = {1.0, 0.0, 1.0};
+    uwu::Vector expectedItem = uwu::Vector(labels);
 
-    // Resultado esperado del gradiente
-    std::vector<double> expectedGradientData = {-19.999996, 0.0, -4.99999999};  // Ajustar según la fórmula
+    // gradient = -label/prediction
+    // pred=0.05, label=1: -1/0.05=-20; pred=0.7, label=0: 0; pred=0.2, label=1: -1/0.2=-5
+    std::vector<double> expectedGradient = {-19.999996, 0.0, -4.99999999};
 
-    // Crear instancia de CrossEntropy
     CrossEntropy lossFunction;
-
-    // Calcular el gradiente
     uwu::Vector computedGradient = lossFunction.gradient(item, expectedItem);
 
-    // Verificar que los valores del gradiente sean correctos con una tolerancia
-    double tolerance = 1e-5;
     for (int i = 0; i < computedGradient.size(); ++i) {
-        EXPECT_NEAR(computedGradient[i], expectedGradientData[i], tolerance);
+        EXPECT_NEAR(computedGradient[i], expectedGradient[i], TOLERANCE);
     }
 }
 
-// Test para el gradiente de CrossEntropy con valores muy pequeños
+// Near-zero predictions test numerical stability
 TEST(CrossEntropyTest, GradientWithSmallPredictions)
 {
-    // Valores de entrada (predicciones pequeñas)
-    std::vector<double> itemData = {1e-10, 1e-10, 1e-10};
-    uwu::Vector item = uwu::Vector(itemData);
+    std::vector<double> predictions = {NEAR_ZERO_PREDICTION, NEAR_ZERO_PREDICTION, NEAR_ZERO_PREDICTION};
+    uwu::Vector item = uwu::Vector(predictions);
 
-    std::vector<double> expectedItemData = {1.0, 0.0, 1.0};
-    uwu::Vector expectedItem = uwu::Vector(expectedItemData);
+    std::vector<double> labels = {1.0, 0.0, 1.0};
+    uwu::Vector expectedItem = uwu::Vector(labels);
 
-    // Resultado esperado del gradiente
-    std::vector<double> expectedGradientData = {-99009900.990099013, 0, -99009900.990099013};  // Ajustar según la fórmula
+    // With clamping, gradient = -label / clamped_prediction
+    const double expectedClampedGradient = -99009900.990099013;
+    std::vector<double> expectedGradient = {expectedClampedGradient, 0, expectedClampedGradient};
 
-    // Crear instancia de CrossEntropy
     CrossEntropy lossFunction;
-
-    // Calcular el gradiente
     uwu::Vector computedGradient = lossFunction.gradient(item, expectedItem);
 
-    // Verificar que los valores del gradiente sean correctos con una tolerancia
-    double tolerance = 1e-5;
     for (int i = 0; i < computedGradient.size(); ++i) {
-        EXPECT_NEAR(computedGradient[i], expectedGradientData[i], tolerance);
+        EXPECT_NEAR(computedGradient[i], expectedGradient[i], TOLERANCE);
     }
 }
 
-// Test para el gradiente de CrossEntropy con predicciones cercanas a 1
+// Predictions near 1.0 (high confidence)
 TEST(CrossEntropyTest, GradientWithPredictionsCloseToOne)
 {
-    // Valores de entrada (predicciones cercanas a 1)
-    std::vector<double> itemData = {0.999, 0.95, 0.999};
-    uwu::Vector item = uwu::Vector(itemData);
+    std::vector<double> predictions = {0.999, 0.95, 0.999};
+    uwu::Vector item = uwu::Vector(predictions);
 
-    std::vector<double> expectedItemData = {1.0, 1.0, 0.0};
-    uwu::Vector expectedItem = uwu::Vector(expectedItemData);
+    std::vector<double> labels = {1.0, 1.0, 0.0};
+    uwu::Vector expectedItem = uwu::Vector(labels);
 
-    // Resultado esperado del gradiente
-    std::vector<double> expectedGradientData = {-1.001000991, -1.052631568, 0};  // Ajustar según la fórmula
+    // gradient = -label/prediction
+    // pred=0.999, label=1: -1/0.999~-1.001; pred=0.95, label=1: -1/0.95~-1.0526; pred=0.999, label=0: 0
+    std::vector<double> expectedGradient = {-1.001000991, -1.052631568, 0};
 
-    // Crear instancia de CrossEntropy
     CrossEntropy lossFunction;
-
-    // Calcular el gradiente
     uwu::Vector computedGradient = lossFunction.gradient(item, expectedItem);
 
-    // Verificar que los valores del gradiente sean correctos con una tolerancia
-    double tolerance = 1e-5;
     for (int i = 0; i < computedGradient.size(); ++i) {
-        EXPECT_NEAR(computedGradient[i], expectedGradientData[i], tolerance);
+        EXPECT_NEAR(computedGradient[i], expectedGradient[i], TOLERANCE);
     }
 }
 
-// Test para el gradiente de CrossEntropy con predicciones de 0
+// Zero predictions test clamping behavior
 TEST(CrossEntropyTest, GradientWithPredictionsZero)
 {
-    // Valores de entrada (predicciones de 0)
-    std::vector<double> itemData = {0.0, 0.0, 0.0};
-    uwu::Vector item = uwu::Vector(itemData);
+    std::vector<double> predictions = {0.0, 0.0, 0.0};
+    uwu::Vector item = uwu::Vector(predictions);
 
-    std::vector<double> expectedItemData = {1.0, 0.0, 1.0};
-    uwu::Vector expectedItem = uwu::Vector(expectedItemData);
+    std::vector<double> labels = {1.0, 0.0, 1.0};
+    uwu::Vector expectedItem = uwu::Vector(labels);
 
-    // Resultado esperado del gradiente
-    std::vector<double> expectedGradientData = {-1e8, 0.0, -1e8};  // Ajustar según la fórmula
+    // Gradient is clamped for zero predictions: -label / clamped_min
+    std::vector<double> expectedGradient = {-CLAMP_GRADIENT_MAGNITUDE, 0.0, -CLAMP_GRADIENT_MAGNITUDE};
 
-    // Crear instancia de CrossEntropy
     CrossEntropy lossFunction;
-
-    // Calcular el gradiente
     uwu::Vector computedGradient = lossFunction.gradient(item, expectedItem);
 
-    // Verificar que los valores del gradiente sean correctos con una tolerancia
-    double tolerance = 1e-5;
     for (int i = 0; i < computedGradient.size(); ++i) {
-        EXPECT_NEAR(computedGradient[i], expectedGradientData[i], tolerance);
+        EXPECT_NEAR(computedGradient[i], expectedGradient[i], TOLERANCE);
     }
 }

@@ -5,30 +5,29 @@
 #include <gtest/gtest.h>
 #include "Layers/Initializers/OneInitializer.h"
 
+namespace {
+    constexpr int NUM_OUTPUTS = 3;
+    constexpr int NUM_INPUTS = 2;
+    constexpr double EXPECTED_INIT_VALUE = 1.0;
+}
 
 TEST(OneInitializerTest, InitializeToOnes) {
-    // Set up dimensions (e.g., 3 outputs x 2 inputs)
-    const int numOutputs = 3;
-    const int numInputs = 2;
-
-    // Prepare weights and bias containers
-    std::vector<std::vector<double>> weights(numOutputs, std::vector<double>(numInputs));
+    std::vector<std::vector<double>> weights(NUM_OUTPUTS, std::vector<double>(NUM_INPUTS));
     Matrix weightsMatrix(weights);
 
-    std::vector<double> biases(numOutputs);
+    std::vector<double> biases(NUM_OUTPUTS);
     uwu::Vector biasesVector(biases);
 
-    // Create an instance of OneInitializer
     OneInitializer oneInit;
     oneInit.initialize(weightsMatrix, biasesVector);
 
-    // Check that all biases are exactly 1.0
+    // All biases should be exactly 1.0
     for (int i = 0; i < biasesVector.size(); ++i) {
-        EXPECT_EQ(biasesVector[i], 1.0);
+        EXPECT_EQ(biasesVector[i], EXPECTED_INIT_VALUE);
     }
 
-    // Check that all weights are exactly 1.0
+    // All weights should be exactly 1.0
     weightsMatrix.iterate([](double& w, int /*row*/, int /*col*/) {
-        EXPECT_DOUBLE_EQ(w, 1.0) << "Weight should be initialized to 1.0";
+        EXPECT_DOUBLE_EQ(w, EXPECTED_INIT_VALUE) << "Weight should be initialized to 1.0";
     });
 }
