@@ -10,6 +10,13 @@ if(CMAKE_BUILD_TYPE STREQUAL "Debug")
     set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${SANITIZER_FLAGS}")
 endif()
 
+# Valgrind build type: debug info, no sanitizers (ASan is incompatible with Valgrind)
+if(CMAKE_BUILD_TYPE STREQUAL "Valgrind")
+    message(STATUS "Enabling Valgrind-compatible build (debug info, no sanitizers)")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g -O0")
+    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -g -O0")
+endif()
+
 # Enable gprof profiler for profiling builds
 if(CMAKE_BUILD_TYPE STREQUAL "Profiling")
     message(STATUS "Enabling gprof profiler for Profiling build")
