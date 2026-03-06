@@ -33,8 +33,6 @@ public:
 
     Matrix predict(const Matrix &input);
 
-    void saveBinary(const std::string& filePath) const;
-    void loadBinary(const std::string& filePath);
     std::string getLayersInfo() const;
 };
 

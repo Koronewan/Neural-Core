@@ -16,10 +16,8 @@ public:
     virtual uwu::Vector forward(const uwu::Vector &input) = 0;
     virtual void backward(
         uwu::Vector &error, const uwu::Vector &previousActivation) = 0;
+        
     [[nodiscard]] virtual std::string getType() const = 0;
-
-    virtual void saveToBinary(std::ofstream& outFile) const = 0;
-    virtual void loadFromBinary(std::ifstream& inFile) = 0;
     [[nodiscard]] virtual std::string getInfo() const = 0;
 };
 

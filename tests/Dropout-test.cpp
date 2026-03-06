@@ -73,39 +73,3 @@ TEST(DropoutTest, FullDropoutAtOneRatio) {
         EXPECT_EQ(output[i], 0.0); // Todas las salidas deben ser 0
     }
 }
-
-TEST(DropoutTest, SaveLoadBinary) {
-    // Crear un objeto de Dropout
-    double dropoutRatio = 0.5;
-    Dropout originalLayer(dropoutRatio);
-
-    // Simular un forward para generar un dropoutMask no vacío
-    uwu::Vector input({1.0, 2.0, 3.0});
-    uwu::Vector output = originalLayer.forward(input);
-
-    // Guardar el objeto en un archivo binario
-    std::ofstream outFile("testDropout.bin", std::ios::binary);
-    ASSERT_TRUE(outFile.is_open());
-    originalLayer.saveToBinary(outFile);
-    outFile.close();
-
-    // Crear un nuevo objeto de Dropout para cargar los datos
-    Dropout loadedLayer(0.0); // Inicializar con un ratio diferente para asegurarnos de que se sobrescribe
-
-    // Cargar el objeto desde el archivo binario
-    std::ifstream inFile("testDropout.bin", std::ios::binary);
-    ASSERT_TRUE(inFile.is_open());
-    loadedLayer.loadFromBinary(inFile);
-    inFile.close();
-
-    // Verificar que el dropoutRatio cargado coincide con el original
-    ASSERT_DOUBLE_EQ(originalLayer.getDropoutRatio(), loadedLayer.getDropoutRatio());
-
-    // Verificar que el dropoutMask cargado coincide con el original
-    const auto& originalMask = originalLayer.getMask();
-    const auto& loadedMask = loadedLayer.getMask();
-    ASSERT_EQ(originalMask.size(), loadedMask.size());
-    for (size_t i = 0; i < originalMask.size(); ++i) {
-        ASSERT_DOUBLE_EQ(originalMask[i], loadedMask[i]);
-    }
-}

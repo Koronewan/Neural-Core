@@ -69,9 +69,6 @@ public:
     }
 
     [[nodiscard]] std::string getType() const override {return "WeightedLayer";}
-
-    void saveToBinary(std::ofstream &outFile) const override;
-    void loadFromBinary(std::ifstream &inFile) override;
     [[nodiscard]] std::string getInfo() const override;
 };
 

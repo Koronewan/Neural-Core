@@ -23,8 +23,6 @@ public:
 
     void update(const std::string &event) override;
     [[nodiscard]] std::string getType() const override{return "Dropout";}
-    void saveToBinary(std::ofstream &outFile) const override;
-    void loadFromBinary(std::ifstream &inFile) override;
     [[nodiscard]] double getDropoutRatio() const {
         return dropoutRatio_;
     }
