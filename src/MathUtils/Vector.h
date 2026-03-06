@@ -42,8 +42,6 @@ namespace uwu
         Vector operator-() const;
         void iterate(const std::function<double(double)> &func);
         void fill(double value);
-        void saveToBinary(std::ofstream &file) const;
-        void loadFromBinary(std::ifstream& file);
 
         [[nodiscard]] std::size_t size() const
         {

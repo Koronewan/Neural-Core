@@ -31,8 +31,6 @@ public:
     Matrix operator^(const double &value) const;
     Matrix operator/(const Matrix& other) const;
     void iterate(const std::function<double(double)> &func);
-    void saveToBinary(std::ofstream &file) const;
-    void loadFromBinary(std::ifstream &file);
 
     void push_back(const uwu::Vector& vector);
     void fill( double value);

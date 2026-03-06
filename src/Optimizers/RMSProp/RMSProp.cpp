@@ -23,7 +23,6 @@ void RMSProp::update(const uwu::Vector& gradient, uwu::Vector& bias, OptimizerSt
 
     const double one_minus_gamma = 1.0 - gamma_;
 
-    #pragma omp parallel for
     for (size_t i = 0; i < bias.size(); ++i)
     {
         // Evita múltiples accesos redundantes

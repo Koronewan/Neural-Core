@@ -8,7 +8,6 @@
 #include <atomic>
 #include <cmath>
 #include <unordered_set>
-#include <execution>
 #include <fstream>
 #include <sstream>
 #include <stdexcept>

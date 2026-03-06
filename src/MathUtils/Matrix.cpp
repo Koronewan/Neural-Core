@@ -5,7 +5,6 @@
 #include "Matrix.h"
 
 #include <cmath>
-#include <execution>
 
 Matrix::Matrix(int rows, int cols,  double initialValue)
 {
@@ -37,9 +36,9 @@ Matrix::Matrix(std::vector<std::vector<double>> matriz)
 
 Matrix& Matrix::operator+=(const double& value)
 {
-    std::for_each(std::execution::par, this->data_.begin(), this->data_.end(),
+    std::for_each(this->data_.begin(), this->data_.end(),
                   [&](std::vector<double>& row) {
-                      std::transform(std::execution::par, row.begin(), row.end(), row.begin(),
+                      std::transform(row.begin(), row.end(), row.begin(),
                                      [value](double& v) { return v + value; });
                   });
 
@@ -49,9 +48,9 @@ Matrix& Matrix::operator+=(const double& value)
 Matrix& Matrix::operator+=(const Matrix& m)
 {
     // Parallelized element-wise addition using std::transform for each row
-    std::for_each(std::execution::par, this->data_.begin(), this->data_.end(),
+    std::for_each(this->data_.begin(), this->data_.end(),
                   [&m, idx = 0](std::vector<double>& row) mutable {
-                      std::transform(std::execution::par, row.begin(), row.end(), m.data_[idx].begin(), row.begin(),
+                      std::transform(row.begin(), row.end(), m.data_[idx].begin(), row.begin(),
                                      std::plus<double>());
                       ++idx; // Increment index after processing each row
                   });
@@ -61,9 +60,9 @@ Matrix& Matrix::operator+=(const Matrix& m)
 Matrix& Matrix::operator/=(const int& value)
 {
     // Parallelized element-wise division using std::transform for the entire matrix
-    std::for_each(std::execution::par, this->data_.begin(), this->data_.end(),
+    std::for_each(this->data_.begin(), this->data_.end(),
                   [value](std::vector<double>& row) {
-                      std::transform(std::execution::par, row.begin(), row.end(), row.begin(),
+                      std::transform(row.begin(), row.end(), row.begin(),
                                      [value](double& val) { return val / value; });
                   });
 
@@ -73,9 +72,9 @@ Matrix& Matrix::operator/=(const int& value)
 Matrix & Matrix::operator-=(const Matrix &other)
 {
     // Parallelized element-wise subtraction using std::transform for the entire matrix
-    std::for_each(std::execution::par, this->data_.begin(), this->data_.end(),
+    std::for_each(this->data_.begin(), this->data_.end(),
                   [&other, i = 0](std::vector<double>& row) mutable {
-                      std::transform(std::execution::par, row.begin(), row.end(), other.data_[i].begin(),
+                      std::transform(row.begin(), row.end(), other.data_[i].begin(),
                                      row.begin(), std::minus<double>());
                       ++i;
                   });
@@ -88,9 +87,9 @@ Matrix Matrix::operator*(const double &value) const
     Matrix result(this->rows_, this->columns_, 0.0);
 
     // Parallelized element-wise multiplication using std::transform for the entire matrix
-    std::for_each(std::execution::par, this->data_.begin(), this->data_.end(),
+    std::for_each(this->data_.begin(), this->data_.end(),
                   [&result, value, i = 0](const std::vector<double>& row) mutable {
-                      std::transform(std::execution::par, row.begin(), row.end(), result.data_[i].begin(),
+                      std::transform(row.begin(), row.end(), result.data_[i].begin(),
                                      [value](double element) { return value * element; });
                       ++i;
                   });
@@ -103,9 +102,9 @@ Matrix Matrix::operator-(const Matrix &other) const
     Matrix result(this->rows_, this->columns_, 0.0);
 
     // Parallelized element-wise subtraction using std::transform for the entire matrix
-    std::for_each(std::execution::par, this->data_.begin(), this->data_.end(),
+    std::for_each(this->data_.begin(), this->data_.end(),
                   [&result, &other, i = 0](const std::vector<double>& row) mutable {
-                      std::transform(std::execution::par, row.begin(), row.end(), other.data_[i].begin(),
+                      std::transform(row.begin(), row.end(), other.data_[i].begin(),
                                      result.data_[i].begin(), std::minus<double>());
                       ++i;
                   });
@@ -119,9 +118,9 @@ Matrix Matrix::operator^(const double &value) const
     Matrix result(this->rows_, this->columns_, 0.0);
 
     // Parallelized element-wise multiplication using std::transform for the entire matrix
-    std::for_each(std::execution::par, this->data_.begin(), this->data_.end(),
+    std::for_each(this->data_.begin(), this->data_.end(),
                   [&result, value, i = 0](const std::vector<double>& row) mutable {
-                      std::transform(std::execution::par, row.begin(), row.end(), result.data_[i].begin(),
+                      std::transform(row.begin(), row.end(), result.data_[i].begin(),
                                      [value](const double element) { return std::pow(element, value); });
                       ++i;
                   });
@@ -134,9 +133,9 @@ Matrix Matrix::operator/(const Matrix &other) const
     Matrix result(this->rows_, this->columns_, 0.0);
 
     // Parallelized element-wise division using std::transform for the entire matrix
-    std::for_each(std::execution::par, this->data_.begin(), this->data_.end(),
+    std::for_each(this->data_.begin(), this->data_.end(),
                   [&result, &other, i = 0](const std::vector<double>& row) mutable {
-                      std::transform(std::execution::par, row.begin(), row.end(), other.data_[i].begin(),
+                      std::transform(row.begin(), row.end(), other.data_[i].begin(),
                                      result.data_[i].begin(), std::divides<double>());
                       ++i;
                   });
@@ -147,9 +146,9 @@ Matrix Matrix::operator/(const Matrix &other) const
 
 void Matrix::iterate(const std::function<double(double)> &func)
 {
-    std::for_each(std::execution::par, this->data_.begin(), this->data_.end(),
+    std::for_each(this->data_.begin(), this->data_.end(),
               [&](std::vector<double>& row) {
-                  std::transform(std::execution::par, row.begin(), row.end(), row.begin(), func);
+                  std::transform(row.begin(), row.end(), row.begin(), func);
               });
 }
 
@@ -163,18 +162,18 @@ void Matrix::push_back(const uwu::Vector &vector)
 void Matrix::fill(double value)
 {
     // Parallelized fill using std::fill and std::execution::par
-    std::for_each(std::execution::par, this->data_.begin(), this->data_.end(),
+    std::for_each(this->data_.begin(), this->data_.end(),
                   [value](std::vector<double>& row) {
-                      std::fill(std::execution::par, row.begin(), row.end(), value);
+                      std::fill(row.begin(), row.end(), value);
                   });
 }
 
 void Matrix::fill(std::function<double()> func)
 {
     // Parallelized fill using std::for_each and func to generate values
-    std::for_each(std::execution::par, this->data_.begin(), this->data_.end(),
+    std::for_each(this->data_.begin(), this->data_.end(),
                   [&](std::vector<double>& row) {
-                      std::for_each(std::execution::par, row.begin(), row.end(), [&](double& v) {
+                      std::for_each(row.begin(), row.end(), [&](double& v) {
                           v = func();  // Assign value from func() to the element
                       });
                   });
@@ -185,9 +184,9 @@ Matrix Matrix::operator+(const Matrix &other) const
     Matrix result(this->rows_, this->columns_, 0.0);
 
     // Parallelized element-wise division using std::transform for the entire matrix
-    std::for_each(std::execution::par, this->data_.begin(), this->data_.end(),
+    std::for_each(this->data_.begin(), this->data_.end(),
                   [&result, &other, i = 0](const std::vector<double>& row) mutable {
-                      std::transform(std::execution::par, row.begin(), row.end(), other.data_[i].begin(),
+                      std::transform(row.begin(), row.end(), other.data_[i].begin(),
                                      result.data_[i].begin(), std::plus<>());
                       ++i;
                   });
@@ -200,10 +199,10 @@ Matrix Matrix::outerProduct(const uwu::Vector &vector1, const uwu::Vector &vecto
     Matrix m(vector1.size(), vector2.size());
 
     // Parallelized loops for outer product computation
-    std::for_each(std::execution::par, m.data_.begin(), m.data_.end(),
+    std::for_each(m.data_.begin(), m.data_.end(),
                   [&](std::vector<double>& row) {
                       size_t i = &row - &m.data_[0];  // Get the row index
-                      std::transform(std::execution::par, vector2.data_.begin(), vector2.data_.end(), row.begin(),
+                      std::transform(vector2.data_.begin(), vector2.data_.end(), row.begin(),
                                      [&](double value) { return vector1.data_[i] * value; });
                   });
 
@@ -215,39 +214,16 @@ Matrix Matrix::transpose() const
     Matrix m(this->columns_, this->rows_);
 
     // Parallelized loops for matrix transposition
-    std::for_each(std::execution::par, m.data_.begin(), m.data_.end(),
+    std::for_each(m.data_.begin(), m.data_.end(),
                   [&](std::vector<double>& row) {
                       size_t rowIndex = &row - &m.data_[0];  // Get the row index
-                      std::transform(std::execution::par, this->data_.begin(), this->data_.end(), row.begin(),
+                      std::transform(this->data_.begin(), this->data_.end(), row.begin(),
                                      [&](const std::vector<double>& srcRow) {
                                          return srcRow[rowIndex];  // Transpose by column access
                                      });
                   });
 
     return m;
-}
-
-void Matrix::saveToBinary(std::ofstream &file) const {
-    // Guardar el número de filas y columnas
-    file.write(reinterpret_cast<const char*>(&rows_), sizeof(rows_));
-    file.write(reinterpret_cast<const char*>(&columns_), sizeof(columns_));
-
-    // Guardar todos los valores de la matriz
-    for (const auto &row : data_) {
-        file.write(reinterpret_cast<const char*>(row.data()), row.size() * sizeof(double));
-    }
-}
-
-void Matrix::loadFromBinary(std::ifstream &file) {
-    // Leer el número de filas y columnas
-    file.read(reinterpret_cast<char*>(&rows_), sizeof(rows_));
-    file.read(reinterpret_cast<char*>(&columns_), sizeof(columns_));
-
-    // Redimensionar y leer los datos
-    data_.resize(rows_, std::vector<double>(columns_));
-    for (auto &row : data_) {
-        file.read(reinterpret_cast<char*>(row.data()), row.size() * sizeof(double));
-    }
 }
 
 std::string Matrix::toString() const {

@@ -29,24 +29,11 @@ endif()
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-# Enable OpenMP if available
-find_package(OpenMP REQUIRED)
-if(OpenMP_CXX_FOUND)
-    message(STATUS "OpenMP found. Enabling OpenMP support.")
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${OpenMP_CXX_FLAGS}")
-    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${OpenMP_C_FLAGS}")
-else()
-    message(WARNING "OpenMP not found. The project will compile without parallelization.")
-endif()
-
-find_package(TBB REQUIRED)
-
 include_directories(src)
 
 add_subdirectory(src)
 add_subdirectory(tests)
 add_subdirectory(lib/googletest)
-#add_subdirectory(lib/Arcade-Learning-Environment-0.6.1)
 
 # Add additional flags for debug builds
 set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -Wall -Wextra -Wpedantic")
