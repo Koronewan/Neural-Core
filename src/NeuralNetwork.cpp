@@ -48,7 +48,7 @@ void NeuralNetwork::fit(const DataSet &dataSet, const int epochs, const int batc
             {
                 // This is the forward pass
                 Matrix activations;
-                auto activation = uwu::Vector(trainingFeatures[i + j]);
+                auto activation = uwu::Vector(trainingFeatures[i * batchSize + j]);
                 activations.push_back(activation);
 
                 for (const auto layer : this->layers_)
@@ -60,7 +60,7 @@ void NeuralNetwork::fit(const DataSet &dataSet, const int epochs, const int batc
                 // End of forward pass, we have all the z values, and it's corresponding activated values
 
                 // Start of backpropagation
-                uwu::Vector error = this->loss_->gradient(activation, uwu::Vector(trainingLabels[i + j]));
+                uwu::Vector error = this->loss_->gradient(activation, uwu::Vector(trainingLabels[i * batchSize + j]));
                 for (int k = this->layers_.size() - 1; k >= 0; k--)
                 {
                     this->layers_[k]->backward(error, uwu::Vector(activations[k]));
