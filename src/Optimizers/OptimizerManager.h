@@ -2,8 +2,8 @@
 // Created by korone on 1/7/25.
 //
 
-#ifndef UWU_LEARNER_OPTIMIZERMANAGER_H
-#define UWU_LEARNER_OPTIMIZERMANAGER_H
+#ifndef NEURAL_CORE_OPTIMIZERMANAGER_H
+#define NEURAL_CORE_OPTIMIZERMANAGER_H
 #include <unordered_map>
 
 #include "InterfaceOptimizer.h"
@@ -24,4 +24,4 @@ public:
 
 
 
-#endif //UWU_LEARNER_OPTIMIZERMANAGER_H
+#endif //NEURAL_CORE_OPTIMIZERMANAGER_H

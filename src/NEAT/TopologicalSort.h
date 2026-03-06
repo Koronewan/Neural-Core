@@ -2,8 +2,8 @@
 // Created by korone on 1/13/25.
 //
 
-#ifndef UWU_LEARNER_TOPOLOGICALSORT_H
-#define UWU_LEARNER_OPOLOGICALSORT_H
+#ifndef NEURAL_CORE_TOPOLOGICALSORT_H
+#define NEURAL_CORE_OPOLOGICALSORT_H
 #include <unordered_map>
 #include <vector>
 
@@ -17,4 +17,4 @@ public:
         const std::vector<Connection> &connections);
 };
 
-#endif //UWU_LEARNER_TOPOLOGICALSORT_H
+#endif //NEURAL_CORE_TOPOLOGICALSORT_H

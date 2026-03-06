@@ -2,8 +2,8 @@
 // Created by korone on 1/7/25.
 //
 
-#ifndef UWU_LEARNER_RELU_H
-#define UWU_LEARNER_RELU_H
+#ifndef NEURAL_CORE_RELU_H
+#define NEURAL_CORE_RELU_H
 #include "InterfaceActivationFunction.h"
 
 
@@ -18,4 +18,4 @@ public:
 
 
 
-#endif //UWU_LEARNER_RELU_H
+#endif //NEURAL_CORE_RELU_H

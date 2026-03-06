@@ -1,5 +1,5 @@
-#ifndef UWU_LEARNER_PERCEPTRON_H
-#define UWU_LEARNER_PERCEPTRON_H
+#ifndef NEURAL_CORE_PERCEPTRON_H
+#define NEURAL_CORE_PERCEPTRON_H
 
 #include "MathUtils/Vector.h"
 #include "DataSet.h"
@@ -24,4 +24,4 @@ public:
     uwu::Vector getWeights() const;
 };
 
-#endif // UWU_LEARNER_PERCEPTRON_H
+#endif // NEURAL_CORE_PERCEPTRON_H

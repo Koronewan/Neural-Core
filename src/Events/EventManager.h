@@ -1,5 +1,5 @@
-#ifndef UWU_LEARNER_EVENT_MANAGER_H
-#define UWU_LEARNER_EVENT_MANAGER_H
+#ifndef NEURAL_CORE_EVENT_MANAGER_H
+#define NEURAL_CORE_EVENT_MANAGER_H
 
 #include <map>
 #include <string>

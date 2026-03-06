@@ -2,8 +2,8 @@
 // Created by korone on 1/11/25.
 //
 
-#ifndef UWU_LEARNER_VECTOR_H
-#define UWU_LEARNER_VECTOR_H
+#ifndef NEURAL_CORE_VECTOR_H
+#define NEURAL_CORE_VECTOR_H
 #include <functional>
 #include <vector>
 #include <fstream>
@@ -81,4 +81,4 @@ namespace uwu
 }
 
 
-#endif //UWU_LEARNER_VECTOR_H
+#endif //NEURAL_CORE_VECTOR_H

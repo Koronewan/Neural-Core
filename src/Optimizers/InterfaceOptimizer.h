@@ -2,8 +2,8 @@
 // Created by korone on 12/21/24.
 //
 
-#ifndef UWU_LEARNER_INTERFACEOPTIMIZER_H
-#define UWU_LEARNER_INTERFACEOPTIMIZER_H
+#ifndef NEURAL_CORE_INTERFACEOPTIMIZER_H
+#define NEURAL_CORE_INTERFACEOPTIMIZER_H
 #include "OptimizerState.h"
 #include <vector>
 #include "MathUtils/Matrix.h"
@@ -21,4 +21,4 @@ public:
 
 };
 
-#endif //UWU_LEARNER_INTERFACEOPTIMIZER_H
+#endif //NEURAL_CORE_INTERFACEOPTIMIZER_H

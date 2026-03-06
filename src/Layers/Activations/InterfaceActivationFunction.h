@@ -2,8 +2,8 @@
 // Created by korone on 12/21/24.
 //
 
-#ifndef UWU_LEARNER_INTERFACEACTIVATIONFUNCTION_H
-#define UWU_LEARNER_INTERFACEACTIVATIONFUNCTION_H
+#ifndef NEURAL_CORE_INTERFACEACTIVATIONFUNCTION_H
+#define NEURAL_CORE_INTERFACEACTIVATIONFUNCTION_H
 #include "MathUtils/Vector.h"
 #include <string>
 
@@ -17,4 +17,4 @@ public:
     [[nodiscard]] virtual std::string getType() const = 0;
 };
 
-#endif //UWU_LEARNER_INTERFACEACTIVATIONFUNCTION_H
+#endif //NEURAL_CORE_INTERFACEACTIVATIONFUNCTION_H

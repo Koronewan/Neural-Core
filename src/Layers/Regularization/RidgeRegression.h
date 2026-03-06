@@ -2,8 +2,8 @@
 // Created by korone on 1/10/25.
 //
 
-#ifndef UWU_LEARNER_RIDGEREGRESSION_H
-#define UWU_LEARNER_RIDGEREGRESSION_H
+#ifndef NEURAL_CORE_RIDGEREGRESSION_H
+#define NEURAL_CORE_RIDGEREGRESSION_H
 #include "Regularizer.h"
 #include "MathUtils/Matrix.h"
 
@@ -18,4 +18,4 @@ public:
     [[nodiscard]] std::string getType() { return "Ridge"; }
 };
 
-#endif //UWU_LEARNER_RIDGEREGRESSION_H
+#endif //NEURAL_CORE_RIDGEREGRESSION_H

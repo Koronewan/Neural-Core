@@ -2,8 +2,8 @@
 // Created by korone on 12/21/24.
 //
 
-#ifndef UWU_LEARNER_INTERFACELAYER_H
-#define UWU_LEARNER_INTERFACELAYER_H
+#ifndef NEURAL_CORE_INTERFACELAYER_H
+#define NEURAL_CORE_INTERFACELAYER_H
 #include <vector>
 #include <sstream>
 
@@ -21,4 +21,4 @@ public:
     [[nodiscard]] virtual std::string getInfo() const = 0;
 };
 
-#endif //UWU_LEARNER_INTERFACELAYER_H
+#endif //NEURAL_CORE_INTERFACELAYER_H

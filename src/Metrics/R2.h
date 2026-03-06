@@ -2,8 +2,8 @@
 // Created by korone on 1/11/25.
 //
 
-#ifndef UWU_LEARNER_R2_H
-#define UWU_LEARNER_R2_H
+#ifndef NEURAL_CORE_R2_H
+#define NEURAL_CORE_R2_H
 #include "InterfaceMetric.h"
 
 #include "MathUtils/Matrix.h"
@@ -15,4 +15,4 @@ public:
         const Matrix& actual) override;
 };
 
-#endif //UWU_LEARNER_R2_H
+#endif //NEURAL_CORE_R2_H
