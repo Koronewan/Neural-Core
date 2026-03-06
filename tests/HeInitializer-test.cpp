@@ -8,6 +8,23 @@
 #include <numeric>
 #include <cmath>
 
+namespace {
+    constexpr double STDDEV_RELATIVE_TOLERANCE = 0.2;  // 20% tolerance for statistical checks
+    constexpr int MEAN_STANDARD_ERRORS = 5;            // Number of standard errors for mean check
+
+    // Small matrix dimensions for basic tests
+    constexpr int SMALL_NUM_OUTPUTS = 4;
+    constexpr int SMALL_NUM_INPUTS = 3;
+
+    // Medium matrix dimensions for dimension-checking test
+    constexpr int MEDIUM_NUM_OUTPUTS = 5;
+    constexpr int MEDIUM_NUM_INPUTS = 2;
+
+    // Large matrix dimensions for statistical tests
+    constexpr int LARGE_NUM_OUTPUTS = 50;
+    constexpr int LARGE_NUM_INPUTS = 20;
+}
+
 /**
  * Helper function to compute the mean of a vector of numbers.
  */
@@ -33,91 +50,67 @@ double standardDeviation(const std::vector<double>& values) {
 }
 
 TEST(HeInitializerTest, BiasesSetToZero) {
-    // Suppose we want a matrix of (nOutputs x nInputs), e.g. 4x3
-    int nOutputs = 4;
-    int nInputs = 3;
-
-    std::vector<std::vector<double>> weights(nOutputs, std::vector<double>(nInputs));
+    std::vector<std::vector<double>> weights(SMALL_NUM_OUTPUTS, std::vector<double>(SMALL_NUM_INPUTS));
     Matrix weightsMatrix(weights);
 
-    std::vector<double> biases(nOutputs);
+    std::vector<double> biases(SMALL_NUM_OUTPUTS);
     uwu::Vector biasesVector(biases);
 
     HeInitializer initializer;
     initializer.initialize(weightsMatrix, biasesVector);
 
-    // Check that all biases are exactly 0
     for (double b : biases) {
         EXPECT_DOUBLE_EQ(b, 0.0) << "Bias should be initialized to zero.";
     }
 }
 
 TEST(HeInitializerTest, WeightsHaveCorrectDimensions) {
-    int nOutputs = 5;
-    int nInputs = 2;
-
-    std::vector<std::vector<double>> weights(nOutputs, std::vector<double>(nInputs));
+    std::vector<std::vector<double>> weights(MEDIUM_NUM_OUTPUTS, std::vector<double>(MEDIUM_NUM_INPUTS));
     Matrix weightsMatrix(weights);
 
-    std::vector<double> biases(nOutputs);
+    std::vector<double> biases(MEDIUM_NUM_OUTPUTS);
     uwu::Vector biasesVector(biases);
 
     HeInitializer initializer;
     initializer.initialize(weightsMatrix, biasesVector);
 
-    // Check dimensions
-    ASSERT_EQ(weightsMatrix.size(), nOutputs);
+    ASSERT_EQ(weightsMatrix.size(), MEDIUM_NUM_OUTPUTS);
     weightsMatrix.iterate([&](double& /*element*/, int row, int /*col*/) {
-        ASSERT_EQ(weightsMatrix[row].size(), static_cast<size_t>(nInputs));
+        ASSERT_EQ(weightsMatrix[row].size(), static_cast<size_t>(MEDIUM_NUM_INPUTS));
     });
-    ASSERT_EQ(biasesVector.size(), static_cast<size_t>(nOutputs));
+    ASSERT_EQ(biasesVector.size(), static_cast<size_t>(MEDIUM_NUM_OUTPUTS));
 }
 
 TEST(HeInitializerTest, WeightsStatisticalCheck) {
-    // We'll do a "larger" matrix to get a better sample of random values
-    // for a basic statistical check (though for very large dimension,
-    // it might cause longer test time).
-    int nOutputs = 50;
-    int nInputs = 20;
-
-    std::vector<std::vector<double>> weights(nOutputs, std::vector<double>(nInputs));
+    std::vector<std::vector<double>> weights(LARGE_NUM_OUTPUTS, std::vector<double>(LARGE_NUM_INPUTS));
     Matrix weightsMatrix(weights);
 
-    std::vector<double> biases(nOutputs);
+    std::vector<double> biases(LARGE_NUM_OUTPUTS);
     uwu::Vector biasesVector(biases);
 
     HeInitializer initializer;
     initializer.initialize(weightsMatrix, biasesVector);
 
-
-    // Collect all weights into a single vector for convenience
+    // Collect all weights for statistical analysis
     std::vector<double> allWeights;
-    allWeights.reserve(nOutputs * nInputs);
+    allWeights.reserve(LARGE_NUM_OUTPUTS * LARGE_NUM_INPUTS);
     weightsMatrix.iterate([&](double value, int i, int j) {
         allWeights.push_back(value);
     });
 
-    // Expected standard deviation is sqrt(2 / nInputs)
-    double expectedStd = std::sqrt(2.0 / static_cast<double>(nInputs));
+    // He initialization: expected stddev = sqrt(2 / nInputs)
+    const double expectedStd = std::sqrt(2.0 / static_cast<double>(LARGE_NUM_INPUTS));
 
     double avg = mean(allWeights);
     double stddev = standardDeviation(allWeights);
 
-    // Because these are random, we allow some leeway for normal variation.
-    // The larger the sample (nOutputs*nInputs), the closer these should be in theory.
-    // A typical rule of thumb might be ~3*SE range for typical test "tolerance."
-    // Standard Error of the mean for normal is (stddev / sqrt(N)).
-
-    // 1) Mean should be near zero
-    //    Let's require it be within ~5 std errors from 0 to be safe
-    double SE_mean = stddev / std::sqrt(allWeights.size());
-    EXPECT_NEAR(avg, 0.0, 5 * SE_mean)
+    // Mean should be near zero (within a few standard errors)
+    const double standardErrorOfMean = stddev / std::sqrt(allWeights.size());
+    EXPECT_NEAR(avg, 0.0, MEAN_STANDARD_ERRORS * standardErrorOfMean)
         << "Mean of He-initialized weights should be near 0.";
 
-    // 2) Standard deviation should be near expectedStd
-    //    We'll allow 20% tolerance or so, as a simple check
-    //    Tolerance can be tuned depending on sample size & desired strictness.
-    double allowedDeviation = 0.2 * expectedStd;
+    // Standard deviation should be near the theoretical value
+    const double allowedDeviation = STDDEV_RELATIVE_TOLERANCE * expectedStd;
     EXPECT_NEAR(stddev, expectedStd, allowedDeviation)
         << "Std dev of He-initialized weights is outside the expected range.";
 }

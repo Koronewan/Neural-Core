@@ -37,36 +37,6 @@ void Dropout::update(const std::string &event) {
 
 }
 
-void Dropout::saveToBinary(std::ofstream &outFile) const {
-    if (!outFile) {
-        throw std::runtime_error("El archivo de salida no está abierto.");
-    }
-
-    // Guardar el tipo de capa
-    std::string layerType = getType(); // "Dropout"
-    size_t typeLength = layerType.size();
-    outFile.write(reinterpret_cast<const char*>(&typeLength), sizeof(typeLength));
-    outFile.write(layerType.data(), typeLength);
-
-    // Guardar el dropoutRatio_
-    outFile.write(reinterpret_cast<const char*>(&dropoutRatio_), sizeof(dropoutRatio_));
-
-    dropoutMask_.saveToBinary(outFile);
-}
-
-void Dropout::loadFromBinary(std::ifstream &inFile) {
-    if (!inFile) {
-        throw std::runtime_error("El archivo de entrada no está abierto.");
-    }
-
-    // Leer el dropoutRatio_
-    inFile.read(reinterpret_cast<char*>(&dropoutRatio_), sizeof(dropoutRatio_));
-    if (!inFile) throw std::runtime_error("Error al leer el dropoutRatio_.");
-
-    // Cargar el dropoutMask_ usando sus propios métodos
-    dropoutMask_.loadFromBinary(inFile);
-}
-
 std::string Dropout::getInfo() const {
     std::ostringstream oss;
     oss << "Layer Type: Dropout\n";

@@ -2,8 +2,8 @@
 // Created by korone on 1/13/25.
 //
 
-#ifndef UWU_LEARNER_GENOME_H
-#define UWU_LEARNER_GENOME_H
+#ifndef NEURAL_CORE_GENOME_H
+#define NEURAL_CORE_GENOME_H
 #include <memory>
 #include <unordered_map>
 #include <vector>
@@ -51,4 +51,4 @@ public:
 
 
 
-#endif //UWU_LEARNER_GENOME_H
+#endif //NEURAL_CORE_GENOME_H

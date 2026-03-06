@@ -6,7 +6,11 @@
 #include <vector>
 #include "./Loss/MeanSquarredError.h"
 
-// Test 1: Check gradient when both vectors are identical (expect zeros).
+namespace {
+    constexpr double STRICT_TOLERANCE = 1e-12;
+}
+
+// Gradient should be zero when predictions exactly match expected values
 TEST(MeanSquaredErrorTest, GradientIdenticalVectors) {
     MeanSquarredError mse;
 
@@ -22,40 +26,38 @@ TEST(MeanSquaredErrorTest, GradientIdenticalVectors) {
     }
 }
 
-// Test 2: Check gradient with simple numeric values
+// Gradient formula: 2 * (expected - item) / n
 TEST(MeanSquaredErrorTest, GradientSimpleValues) {
     MeanSquarredError mse;
 
-    // item = {1, 2, 3}, expected = {3, 2, 1}
-    // difference: (3-1, 2-2, 1-3) = (2, 0, -2)
-    // multiply by 2 => (4, 0, -4)
-    // divide by size()=3 => (4/3, 0, -4/3)
+    // item={1,2,3}, expected={3,2,1}
+    // diff = (3-1, 2-2, 1-3) = (2, 0, -2)
+    // gradient = diff / n = (2/3, 0, -2/3)
     std::vector<double> item = {1.0, 2.0, 3.0};
     std::vector<double> expected = {3.0, 2.0, 1.0};
+    constexpr int vectorSize = 3;
 
     uwu::Vector grad = mse.gradient(item, expected);
 
-    // Check results:
-    ASSERT_EQ(grad.size(), 3u);
-    EXPECT_NEAR(grad[0],  4.0/3.0, 1e-12);
-    EXPECT_NEAR(grad[1],  0.0,    1e-12);
-    EXPECT_NEAR(grad[2], -4.0/3.0, 1e-12);
+    ASSERT_EQ(grad.size(), static_cast<size_t>(vectorSize));
+    EXPECT_NEAR(grad[0], -2.0 / vectorSize, STRICT_TOLERANCE);
+    EXPECT_NEAR(grad[1], 0.0,              STRICT_TOLERANCE);
+    EXPECT_NEAR(grad[2], 2.0 / vectorSize, STRICT_TOLERANCE);
 }
 
-// Test 3: Check a non-trivial case with negative values
+// Verify gradient handles negative values correctly
 TEST(MeanSquaredErrorTest, GradientWithNegatives) {
     MeanSquarredError mse;
 
-    // item = {-1, -2}, expected = {1, 2}
-    // difference: (1 - (-1), 2 - (-2)) = (2, 4)
-    // multiply by 2 => (4, 8)
-    // divide by size()=2 => (2, 4)
+    // item={-1,-2}, expected={1,2}
+    // diff = (1-(-1), 2-(-2)) = (2, 4)
+    // gradient = diff / n = (2/2, 4/2) = (1, 2)
     std::vector<double> item = {-1.0, -2.0};
     std::vector<double> expected = {1.0, 2.0};
 
     uwu::Vector grad = mse.gradient(item, expected);
 
     ASSERT_EQ(grad.size(), 2u);
-    EXPECT_DOUBLE_EQ(grad[0], 2.0);
-    EXPECT_DOUBLE_EQ(grad[1], 4.0);
+    EXPECT_DOUBLE_EQ(grad[0], -1.0);
+    EXPECT_DOUBLE_EQ(grad[1], -2.0);
 }

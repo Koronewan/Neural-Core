@@ -4,6 +4,11 @@
 
 #include "../src/MathUtils/Vector.h"
 #include <gtest/gtest.h>
+#include <fstream>
+
+namespace {
+    const std::string BINARY_TEST_FILE = "test_vector.bin";
+}
 
 
 // Test constructing uwu::Vector<int> and checking contents
@@ -39,190 +44,143 @@ TEST(VectorTest, CopyAssignment) {
 
 TEST(VectorTest, VectorAdditionAssignmentOperator) {
     uwu::Vector vec1;
-    vec1.data_ = {1.0, 2.0, 3.0};  // Initialize vec1 with values
+    vec1.data_ = {1.0, 2.0, 3.0};
 
     uwu::Vector vec2;
-    vec2.data_ = {4.0, 5.0, 6.0};  // Initialize vec2 with values
+    vec2.data_ = {4.0, 5.0, 6.0};
 
-    vec1 += vec2;  // Add vec2 to vec1
+    vec1 += vec2;
 
-    // Check if the elements are added correctly
-    EXPECT_DOUBLE_EQ(vec1.data_[0], 5.0);  // 1.0 + 4.0 = 5.0
-    EXPECT_DOUBLE_EQ(vec1.data_[1], 7.0);  // 2.0 + 5.0 = 7.0
-    EXPECT_DOUBLE_EQ(vec1.data_[2], 9.0);  // 3.0 + 6.0 = 9.0
+    EXPECT_DOUBLE_EQ(vec1.data_[0], 5.0);   // 1+4
+    EXPECT_DOUBLE_EQ(vec1.data_[1], 7.0);   // 2+5
+    EXPECT_DOUBLE_EQ(vec1.data_[2], 9.0);   // 3+6
 }
 
 TEST(VectorTest, VectorMultiplicationAssignmentOperator) {
     uwu::Vector vec1;
-    vec1.data_ = {1.0, 2.0, 3.0};  // Initialize vec1 with values
+    vec1.data_ = {1.0, 2.0, 3.0};
 
     uwu::Vector vec2;
-    vec2.data_ = {4.0, 5.0, 6.0};  // Initialize vec2 with values
+    vec2.data_ = {4.0, 5.0, 6.0};
 
-    vec1 *= vec2;  // Multiply each element of vec1 by the corresponding element of vec2
+    vec1 *= vec2;
 
-    // Check if the elements are multiplied correctly
-    EXPECT_DOUBLE_EQ(vec1.data_[0], 4.0);  // 1.0 * 4.0 = 4.0
-    EXPECT_DOUBLE_EQ(vec1.data_[1], 10.0); // 2.0 * 5.0 = 10.0
-    EXPECT_DOUBLE_EQ(vec1.data_[2], 18.0); // 3.0 * 6.0 = 18.0
+    EXPECT_DOUBLE_EQ(vec1.data_[0], 4.0);   // 1*4
+    EXPECT_DOUBLE_EQ(vec1.data_[1], 10.0);  // 2*5
+    EXPECT_DOUBLE_EQ(vec1.data_[2], 18.0);  // 3*6
 }
 
 TEST(VectorTest, VectorSubtractionAssignmentOperator) {
     uwu::Vector vec1;
-    vec1.data_ = {5.0, 6.0, 7.0};  // Initialize vec1 with values
+    vec1.data_ = {5.0, 6.0, 7.0};
 
     uwu::Vector vec2;
-    vec2.data_ = {1.0, 2.0, 3.0};  // Initialize vec2 with values
+    vec2.data_ = {1.0, 2.0, 3.0};
 
-    vec1 -= vec2;  // Subtract vec2 from vec1
+    vec1 -= vec2;
 
-    // Check if the elements are subtracted correctly
-    EXPECT_DOUBLE_EQ(vec1.data_[0], 4.0);  // 5.0 - 1.0 = 4.0
-    EXPECT_DOUBLE_EQ(vec1.data_[1], 4.0);  // 6.0 - 2.0 = 4.0
-    EXPECT_DOUBLE_EQ(vec1.data_[2], 4.0);  // 7.0 - 3.0 = 4.0
+    EXPECT_DOUBLE_EQ(vec1.data_[0], 4.0);  // 5-1
+    EXPECT_DOUBLE_EQ(vec1.data_[1], 4.0);  // 6-2
+    EXPECT_DOUBLE_EQ(vec1.data_[2], 4.0);  // 7-3
 }
 
 TEST(VectorTest, VectorSubtractionOperator) {
     uwu::Vector vec1;
-    vec1.data_ = {5.0, 6.0, 7.0};  // Initialize vec1 with values
+    vec1.data_ = {5.0, 6.0, 7.0};
 
     uwu::Vector vec2;
-    vec2.data_ = {1.0, 2.0, 3.0};  // Initialize vec2 with values
+    vec2.data_ = {1.0, 2.0, 3.0};
 
-    uwu::Vector result = vec1 - vec2;  // Subtract vec2 from vec1
+    uwu::Vector result = vec1 - vec2;
 
-    // Check if the elements are subtracted correctly
-    EXPECT_DOUBLE_EQ(result.data_[0], 4.0);  // 5.0 - 1.0 = 4.0
-    EXPECT_DOUBLE_EQ(result.data_[1], 4.0);  // 6.0 - 2.0 = 4.0
-    EXPECT_DOUBLE_EQ(result.data_[2], 4.0);  // 7.0 - 3.0 = 4.0
+    EXPECT_DOUBLE_EQ(result.data_[0], 4.0);  // 5-1
+    EXPECT_DOUBLE_EQ(result.data_[1], 4.0);  // 6-2
+    EXPECT_DOUBLE_EQ(result.data_[2], 4.0);  // 7-3
 }
 
 TEST(VectorTest, VectorAdditionOperator) {
     uwu::Vector vec1;
-    vec1.data_ = {1.0, 2.0, 3.0};  // Initialize vec1 with values
+    vec1.data_ = {1.0, 2.0, 3.0};
 
     uwu::Vector vec2;
-    vec2.data_ = {4.0, 5.0, 6.0};  // Initialize vec2 with values
+    vec2.data_ = {4.0, 5.0, 6.0};
 
-    uwu::Vector result = vec1 + vec2;  // Add vec1 and vec2
+    uwu::Vector result = vec1 + vec2;
 
-    // Check if the elements are added correctly
-    EXPECT_DOUBLE_EQ(result.data_[0], 5.0);  // 1.0 + 4.0 = 5.0
-    EXPECT_DOUBLE_EQ(result.data_[1], 7.0);  // 2.0 + 5.0 = 7.0
-    EXPECT_DOUBLE_EQ(result.data_[2], 9.0);  // 3.0 + 6.0 = 9.0
+    EXPECT_DOUBLE_EQ(result.data_[0], 5.0);  // 1+4
+    EXPECT_DOUBLE_EQ(result.data_[1], 7.0);  // 2+5
+    EXPECT_DOUBLE_EQ(result.data_[2], 9.0);  // 3+6
 }
 
 TEST(VectorTest, VectorAdditionWithScalarOperator) {
     uwu::Vector vec;
-    vec.data_ = {1.0, 2.0, 3.0};  // Initialize vec with values
+    vec.data_ = {1.0, 2.0, 3.0};
 
-    double scalar = 5.0;
+    constexpr double scalar = 5.0;
+    uwu::Vector result = vec + scalar;
 
-    uwu::Vector result = vec + scalar;  // Add scalar to each element of vec
-
-    // Check if each element is incremented by the scalar
-    EXPECT_DOUBLE_EQ(result.data_[0], 6.0);  // 1.0 + 5.0 = 6.0
-    EXPECT_DOUBLE_EQ(result.data_[1], 7.0);  // 2.0 + 5.0 = 7.0
-    EXPECT_DOUBLE_EQ(result.data_[2], 8.0);  // 3.0 + 5.0 = 8.0
+    EXPECT_DOUBLE_EQ(result.data_[0], 6.0);  // 1+5
+    EXPECT_DOUBLE_EQ(result.data_[1], 7.0);  // 2+5
+    EXPECT_DOUBLE_EQ(result.data_[2], 8.0);  // 3+5
 }
 
 TEST(VectorTest, VectorMultiplicationWithScalarOperator) {
     uwu::Vector vec;
-    vec.data_ = {1.0, 2.0, 3.0};  // Initialize vec with values
+    vec.data_ = {1.0, 2.0, 3.0};
 
-    double scalar = 3.0;
+    constexpr double scalar = 3.0;
+    uwu::Vector result = vec * scalar;
 
-    uwu::Vector result = vec * scalar;  // Multiply each element of vec by scalar
-
-    // Check if each element is multiplied by the scalar
-    EXPECT_DOUBLE_EQ(result.data_[0], 3.0);  // 1.0 * 3.0 = 3.0
-    EXPECT_DOUBLE_EQ(result.data_[1], 6.0);  // 2.0 * 3.0 = 6.0
-    EXPECT_DOUBLE_EQ(result.data_[2], 9.0);  // 3.0 * 3.0 = 9.0
+    EXPECT_DOUBLE_EQ(result.data_[0], 3.0);  // 1*3
+    EXPECT_DOUBLE_EQ(result.data_[1], 6.0);  // 2*3
+    EXPECT_DOUBLE_EQ(result.data_[2], 9.0);  // 3*3
 }
 
 TEST(VectorTest, VectorDivisionByScalarOperator) {
     uwu::Vector vec;
-    vec.data_ = {6.0, 8.0, 10.0};  // Initialize vec with values
+    vec.data_ = {6.0, 8.0, 10.0};
 
-    double scalar = 2.0;
+    constexpr double scalar = 2.0;
+    uwu::Vector result = vec / scalar;
 
-    uwu::Vector result = vec / scalar;  // Divide each element of vec by scalar
-
-    // Check if each element is divided by the scalar
-    EXPECT_DOUBLE_EQ(result.data_[0], 3.0);  // 6.0 / 2.0 = 3.0
-    EXPECT_DOUBLE_EQ(result.data_[1], 4.0);  // 8.0 / 2.0 = 4.0
-    EXPECT_DOUBLE_EQ(result.data_[2], 5.0);  // 10.0 / 2.0 = 5.0
+    EXPECT_DOUBLE_EQ(result.data_[0], 3.0);  // 6/2
+    EXPECT_DOUBLE_EQ(result.data_[1], 4.0);  // 8/2
+    EXPECT_DOUBLE_EQ(result.data_[2], 5.0);  // 10/2
 }
 
 TEST(VectorTest, VectorDivisionByVectorOperator) {
     uwu::Vector vec1;
-    vec1.data_ = {6.0, 8.0, 10.0};  // Initialize vec1 with values
+    vec1.data_ = {6.0, 8.0, 10.0};
 
     uwu::Vector vec2;
-    vec2.data_ = {2.0, 4.0, 5.0};  // Initialize vec2 with values
+    vec2.data_ = {2.0, 4.0, 5.0};
 
-    uwu::Vector result = vec1 / vec2;  // Divide each element of vec1 by corresponding element of vec2
+    uwu::Vector result = vec1 / vec2;
 
-    // Check if the elements are divided correctly
-    EXPECT_DOUBLE_EQ(result.data_[0], 3.0);  // 6.0 / 2.0 = 3.0
-    EXPECT_DOUBLE_EQ(result.data_[1], 2.0);  // 8.0 / 4.0 = 2.0
-    EXPECT_DOUBLE_EQ(result.data_[2], 2.0);  // 10.0 / 5.0 = 2.0
+    EXPECT_DOUBLE_EQ(result.data_[0], 3.0);  // 6/2
+    EXPECT_DOUBLE_EQ(result.data_[1], 2.0);  // 8/4
+    EXPECT_DOUBLE_EQ(result.data_[2], 2.0);  // 10/5
 }
 
 TEST(VectorTest, VectorExponentiationOperator) {
     uwu::Vector vec;
-    vec.data_ = {2.0, 3.0, 4.0};  // Initialize vec with values
+    vec.data_ = {2.0, 3.0, 4.0};
 
-    int exponent = 2;
+    constexpr int exponent = 2;
+    uwu::Vector result = vec ^ exponent;
 
-    uwu::Vector result = vec ^ exponent;  // Raise each element of vec to the power of 2
-
-    // Check if the elements are raised to the correct power
-    EXPECT_DOUBLE_EQ(result.data_[0], 4.0);  // 2.0 ^ 2 = 4.0
-    EXPECT_DOUBLE_EQ(result.data_[1], 9.0);  // 3.0 ^ 2 = 9.0
-    EXPECT_DOUBLE_EQ(result.data_[2], 16.0); // 4.0 ^ 2 = 16.0
+    EXPECT_DOUBLE_EQ(result.data_[0], 4.0);   // 2^2
+    EXPECT_DOUBLE_EQ(result.data_[1], 9.0);   // 3^2
+    EXPECT_DOUBLE_EQ(result.data_[2], 16.0);  // 4^2
 }
 
 TEST(VectorTest, VectorNegationOperator) {
     uwu::Vector vec;
-    vec.data_ = {1.0, -2.0, 3.0};  // Initialize vec with values
+    vec.data_ = {1.0, -2.0, 3.0};
 
-    uwu::Vector result = -vec;  // Negate each element of vec
+    uwu::Vector result = -vec;
 
-    // Check if each element is negated correctly
-    EXPECT_DOUBLE_EQ(result.data_[0], -1.0);  // -1.0
-    EXPECT_DOUBLE_EQ(result.data_[1], 2.0);   // -(-2.0) = 2.0
-    EXPECT_DOUBLE_EQ(result.data_[2], -3.0);  // -3.0
-}
-
-TEST(VectorTest, SaveAndLoadBinary) {
-    // Vector original para guardar
-    uwu::Vector original({1.0, 2.5, 3.75});
-
-    // Archivo temporal para pruebas
-    const std::string testFile = "test_vector.bin";
-
-    // Guardar el vector en el archivo
-    {
-        std::ofstream outFile(testFile, std::ios::binary);
-        ASSERT_TRUE(outFile.is_open()) << "No se pudo abrir el archivo para escritura.";
-        original.saveToBinary(outFile);
-    }
-
-    // Cargar el vector desde el archivo
-    uwu::Vector loaded;
-    {
-        std::ifstream inFile(testFile, std::ios::binary);
-        ASSERT_TRUE(inFile.is_open()) << "No se pudo abrir el archivo para lectura.";
-        loaded.loadFromBinary(inFile);
-    }
-
-    // Comparar el vector original con el cargado
-    ASSERT_EQ(original.size(), loaded.size()) << "El tamaño del vector cargado no coincide.";
-    for (std::size_t i = 0; i < original.size(); ++i) {
-        EXPECT_DOUBLE_EQ(original[i], loaded[i]) << "Los valores en el índice " << i << " no coinciden.";
-    }
-
-    // Limpiar el archivo de prueba
-    std::remove(testFile.c_str());
+    EXPECT_DOUBLE_EQ(result.data_[0], -1.0);  // -(1)
+    EXPECT_DOUBLE_EQ(result.data_[1], 2.0);   // -(-2)
+    EXPECT_DOUBLE_EQ(result.data_[2], -3.0);  // -(3)
 }

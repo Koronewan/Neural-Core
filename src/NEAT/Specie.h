@@ -2,8 +2,8 @@
 // Created by korone on 1/13/25.
 //
 
-#ifndef UWU_LEARNER_SPECIE_H
-#define UWU_LEARNER_SPECIE_H
+#ifndef NEURAL_CORE_SPECIE_H
+#define NEURAL_CORE_SPECIE_H
 #include <memory>
 #include <vector>
 
@@ -48,4 +48,4 @@ public:
     int genomes() const  { return genomes_.size(); }
 };
 
-#endif //UWU_LEARNER_SPECIE_H
+#endif //NEURAL_CORE_SPECIE_H

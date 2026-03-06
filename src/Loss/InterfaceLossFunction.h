@@ -2,8 +2,8 @@
 // Created by korone on 12/21/24.
 //
 
-#ifndef UWU_LEARNER_INTERFACELOSSFUNCTION_H
-#define UWU_LEARNER_INTERFACELOSSFUNCTION_H
+#ifndef NEURAL_CORE_INTERFACELOSSFUNCTION_H
+#define NEURAL_CORE_INTERFACELOSSFUNCTION_H
 #include <vector>
 #include "MathUtils/Vector.h"
 
@@ -15,4 +15,4 @@ public:
     virtual ~InterfaceLossFunction() = default;
 };
 
-#endif //UWU_LEARNER_INTERFACELOSSFUNCTION_H
+#endif //NEURAL_CORE_INTERFACELOSSFUNCTION_H

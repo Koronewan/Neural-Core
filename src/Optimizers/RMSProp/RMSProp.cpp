@@ -21,22 +21,6 @@ void RMSProp::update(const uwu::Vector& gradient, uwu::Vector& bias, OptimizerSt
         rmsState.meanSquareBias.resize(bias.size(), 0.0);
     }
 
-    const double one_minus_gamma = 1.0 - gamma_;
-
-    #pragma omp parallel for
-    for (size_t i = 0; i < bias.size(); ++i)
-    {
-        // Evita múltiples accesos redundantes
-        double grad = gradient[i];
-        double& meanSquare = rmsState.meanSquareBias[i];
-
-        // Actualizar meanSquare acumulado
-        meanSquare = gamma_ * meanSquare + one_minus_gamma * (grad * grad);
-
-        // Actualizar bias con el gradiente adaptativo
-        bias[i] -= learning_rate_ * grad / (std::sqrt(meanSquare) + epsilon_);
-    }
-
     rmsState.meanSquareBias = rmsState.meanSquareBias * gamma_ + (gradient ^ 2) * (1.0 - gamma_);
 
     uwu::Vector denominator = rmsState.meanSquareBias;

@@ -2,8 +2,8 @@
 // Created by korone on 1/13/25.
 //
 
-#ifndef UWU_LEARNER_POPULATION_H
-#define UWU_LEARNER_POPULATION_H
+#ifndef NEURAL_CORE_POPULATION_H
+#define NEURAL_CORE_POPULATION_H
 #include <utility>
 #include <vector>
 
@@ -43,4 +43,4 @@ public:
     void addRandomGenom(int input, int output);
 };
 
-#endif //UWU_LEARNER_POPULATION_H
+#endif //NEURAL_CORE_POPULATION_H

@@ -12,7 +12,6 @@
 #include "Layers/Initializers/HeInitializer.h"
 #include "Layers/Initializers/OneInitializer.h"
 #include "Layers/Regularization/LassoRidgeRegression.h"
-#include "Loss/CrossEntropy.h"
 
 //
 // Created by tar87 on 20/12/2024.

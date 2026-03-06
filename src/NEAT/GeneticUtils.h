@@ -2,8 +2,8 @@
 // Created by korone on 1/13/25.
 //
 
-#ifndef  UWU_LEARNER_GENETICUTILS_H
-#define  UWU_LEARNER_GENETICUTILS_H
+#ifndef  NEURAL_CORE_GENETICUTILS_H
+#define  NEURAL_CORE_GENETICUTILS_H
 #include <memory>
 #include <vector>
 #include <random>
@@ -60,4 +60,4 @@ T GeneticUtils::randomElement(T e1, T e2)
     return e2;
 }
 
-#endif // UWU_LEARNER_GENETICUTILS_H
+#endif // NEURAL_CORE_GENETICUTILS_H

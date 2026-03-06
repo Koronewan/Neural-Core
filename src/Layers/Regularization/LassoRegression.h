@@ -2,8 +2,8 @@
 // Created by korone on 1/10/25.
 //
 
-#ifndef UWU_LEARNER_LASSOREGRESSION_H
-#define UWU_LEARNER_LASSOREGRESSION_H
+#ifndef NEURAL_CORE_LASSOREGRESSION_H
+#define NEURAL_CORE_LASSOREGRESSION_H
 #include <string>
 
 #include "Regularizer.h"
@@ -20,4 +20,4 @@ public:
     [[nodiscard]] std::string getType() { return "Lasso"; }
 };
 
-#endif //UWU_LEARNER_LASSOREGRESSION_H
+#endif //NEURAL_CORE_LASSOREGRESSION_H

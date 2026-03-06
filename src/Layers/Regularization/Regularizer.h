@@ -2,8 +2,8 @@
 // Created by korone on 1/10/25.
 //
 
-#ifndef UWU_LEARNER_REGULARIZER_H
-#define UWU_LEARNER_REGULARIZER_H
+#ifndef NEURAL_CORE_REGULARIZER_H
+#define NEURAL_CORE_REGULARIZER_H
 #include <vector>
 #include <string>
 
@@ -18,4 +18,4 @@ public:
     [[nodiscard]] std::string getType() { return "Regularizer"; }
 };
 
-#endif //UWU_LEARNER_REGULARIZER_H
+#endif //NEURAL_CORE_REGULARIZER_H

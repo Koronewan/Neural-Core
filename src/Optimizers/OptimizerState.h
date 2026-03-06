@@ -2,8 +2,8 @@
 // Created by korone on 1/7/25.
 //
 
-#ifndef UWU_LEARNER_OPTIMIZERSTATE_H
-#define UWU_LEARNER_OPTIMIZERSTATE_H
+#ifndef NEURAL_CORE_OPTIMIZERSTATE_H
+#define NEURAL_CORE_OPTIMIZERSTATE_H
 
 #include "MathUtils/Matrix.h"
 
@@ -13,4 +13,4 @@ public:
     virtual ~OptimizerState() = default;
 };
 
-#endif //UWU_LEARNER_OPTIMIZERSTATE_H
+#endif //NEURAL_CORE_OPTIMIZERSTATE_H

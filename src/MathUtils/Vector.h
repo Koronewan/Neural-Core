@@ -2,8 +2,8 @@
 // Created by korone on 1/11/25.
 //
 
-#ifndef UWU_LEARNER_VECTOR_H
-#define UWU_LEARNER_VECTOR_H
+#ifndef NEURAL_CORE_VECTOR_H
+#define NEURAL_CORE_VECTOR_H
 #include <functional>
 #include <vector>
 #include <fstream>
@@ -42,8 +42,6 @@ namespace uwu
         Vector operator-() const;
         void iterate(const std::function<double(double)> &func);
         void fill(double value);
-        void saveToBinary(std::ofstream &file) const;
-        void loadFromBinary(std::ifstream& file);
 
         [[nodiscard]] std::size_t size() const
         {
@@ -83,4 +81,4 @@ namespace uwu
 }
 
 
-#endif //UWU_LEARNER_VECTOR_H
+#endif //NEURAL_CORE_VECTOR_H

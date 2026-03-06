@@ -2,8 +2,8 @@
 // Created by korone on 12/21/24.
 //
 
-#ifndef UWU_LEARNER_NEURALNETWORK_H
-#define UWU_LEARNER_NEURALNETWORK_H
+#ifndef NEURAL_CORE_NEURALNETWORK_H
+#define NEURAL_CORE_NEURALNETWORK_H
 
 #include <vector>
 
@@ -33,9 +33,7 @@ public:
 
     Matrix predict(const Matrix &input);
 
-    void saveBinary(const std::string& filePath) const;
-    void loadBinary(const std::string& filePath);
     std::string getLayersInfo() const;
 };
 
-#endif //UWU_LEARNER_NEURALNETWORK_H
+#endif //NEURAL_CORE_NEURALNETWORK_H

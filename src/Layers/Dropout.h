@@ -2,8 +2,8 @@
 // Created by korone on 12/21/24.
 //
 
-#ifndef UWU_LEARNER_DROPOUT_H
-#define UWU_LEARNER_DROPOUT_H
+#ifndef NEURAL_CORE_DROPOUT_H
+#define NEURAL_CORE_DROPOUT_H
 #include "InterfaceLayer.h"
 #include "MathUtils/Vector.h"
 #include <random>
@@ -23,8 +23,6 @@ public:
 
     void update(const std::string &event) override;
     [[nodiscard]] std::string getType() const override{return "Dropout";}
-    void saveToBinary(std::ofstream &outFile) const override;
-    void loadFromBinary(std::ifstream &inFile) override;
     [[nodiscard]] double getDropoutRatio() const {
         return dropoutRatio_;
     }
@@ -34,4 +32,4 @@ public:
     [[nodiscard]] std::string getInfo() const override;
 };
 
-#endif //UWU_LEARNER_DROPOUT_H
+#endif //NEURAL_CORE_DROPOUT_H

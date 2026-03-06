@@ -5,33 +5,40 @@
 #include <gtest/gtest.h>
 #include "EarlyStopping.h"
 
+namespace {
+    constexpr int DEFAULT_PATIENCE = 2;
+    constexpr int HIGHER_PATIENCE = 3;
+    constexpr double SMALL_DELTA = 0.01;
+    constexpr double LARGER_DELTA = 0.05;
+    const std::string MINIMIZE_MODE = "min";
+    const std::string MAXIMIZE_MODE = "max";
+}
+
 TEST(EarlyStoppingTest, InitializeDefaultConstructor) {
     EarlyStopping earlyStopping;
 
-    // Comprobar valores iniciales del constructor por defecto
     EXPECT_EQ(earlyStopping.shouldStop(), false);
     EXPECT_NO_THROW(earlyStopping.reset());
 }
 
 TEST(EarlyStoppingTest, InitializeWithParameters) {
-    EarlyStopping earlyStopping(3, 0.01, "min");
+    EarlyStopping earlyStopping(HIGHER_PATIENCE, SMALL_DELTA, MINIMIZE_MODE);
 
-    // Comprobar valores iniciales
     EXPECT_EQ(earlyStopping.shouldStop(), false);
     EXPECT_NO_THROW(earlyStopping.reset());
 }
 
 TEST(EarlyStoppingTest, MinimizeMetric) {
-    EarlyStopping earlyStopping(2, 0.01, "min");
+    EarlyStopping earlyStopping(DEFAULT_PATIENCE, SMALL_DELTA, MINIMIZE_MODE);
 
-    // Simular métricas que mejoran
+    // Simulate improving metrics (decreasing loss)
     earlyStopping.evaluate(0.5);
     EXPECT_FALSE(earlyStopping.shouldStop());
 
     earlyStopping.evaluate(0.4);
     EXPECT_FALSE(earlyStopping.shouldStop());
 
-    // Simular métricas que no mejoran
+    // Simulate stagnating/worsening metrics
     earlyStopping.evaluate(0.41);
     earlyStopping.evaluate(0.42);
     earlyStopping.evaluate(0.43);
@@ -39,16 +46,16 @@ TEST(EarlyStoppingTest, MinimizeMetric) {
 }
 
 TEST(EarlyStoppingTest, MaximizeMetric) {
-    EarlyStopping earlyStopping(2, 0.01, "max");
+    EarlyStopping earlyStopping(DEFAULT_PATIENCE, SMALL_DELTA, MAXIMIZE_MODE);
 
-    // Simular métricas que mejoran
+    // Simulate improving metrics (increasing accuracy)
     earlyStopping.evaluate(0.7);
     EXPECT_FALSE(earlyStopping.shouldStop());
 
     earlyStopping.evaluate(0.72);
     EXPECT_FALSE(earlyStopping.shouldStop());
 
-    // Simular métricas que no mejoran
+    // Simulate stagnating/worsening metrics
     earlyStopping.evaluate(0.71);
     earlyStopping.evaluate(0.70);
     earlyStopping.evaluate(0.70);
@@ -56,16 +63,16 @@ TEST(EarlyStoppingTest, MaximizeMetric) {
 }
 
 TEST(EarlyStoppingTest, ResetMethod) {
-    EarlyStopping earlyStopping(2, 0.01, "min");
+    EarlyStopping earlyStopping(DEFAULT_PATIENCE, SMALL_DELTA, MINIMIZE_MODE);
 
-    // Simular métricas que no mejoran
+    // Trigger early stopping with worsening metrics
     earlyStopping.evaluate(0.5);
     earlyStopping.evaluate(0.6);
     earlyStopping.evaluate(0.7);
     earlyStopping.evaluate(0.8);
     EXPECT_TRUE(earlyStopping.shouldStop());
 
-    // Resetear y comprobar que se reinicia correctamente
+    // Reset and verify it restarts correctly
     earlyStopping.reset();
     EXPECT_FALSE(earlyStopping.shouldStop());
 
@@ -74,15 +81,15 @@ TEST(EarlyStoppingTest, ResetMethod) {
 }
 
 TEST(EarlyStoppingTest, EvaluateWithDelta) {
-    EarlyStopping earlyStopping(3, 0.05, "min");
+    EarlyStopping earlyStopping(HIGHER_PATIENCE, LARGER_DELTA, MINIMIZE_MODE);
 
-    // Simular pequeñas mejoras por debajo del delta
+    // Small improvements below the delta threshold
     earlyStopping.evaluate(0.5);
-    earlyStopping.evaluate(0.49); // No cuenta como mejora significativa
+    earlyStopping.evaluate(0.49); // Not a significant improvement (< delta)
     earlyStopping.evaluate(0.48);
     EXPECT_FALSE(earlyStopping.shouldStop());
 
-    // Sin mejora suficiente, debe detenerse
+    // No sufficient improvement; should trigger stop
     earlyStopping.evaluate(0.48);
     earlyStopping.evaluate(0.48);
     earlyStopping.evaluate(0.48);

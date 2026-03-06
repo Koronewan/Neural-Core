@@ -3,63 +3,57 @@
 #include <sstream>
 #include "../src/NEAT/Genome.h"
 
+namespace {
+    constexpr int NUM_INPUTS = 2;
+    constexpr int NUM_OUTPUTS = 2;
+    constexpr double TEST_FITNESS = 42.0;
+    const std::string GENOME_SAVE_FILE = "test_genome.txt";
+    const std::string EMPTY_GENOME_SAVE_FILE = "empty_genome.txt";
+    const std::vector<double> FORWARD_PASS_INPUT = {0.0, 1.0};
+}
+
 TEST(GenomeTest, SaveAndLoad) {
-    // Crear configuraciones e instancias necesarias
     Config config;
     InnovationCounter innovationCounter;
 
-    // Crear un genome original con nodos y conexiones
-    Genome originalGenome(config, innovationCounter, 2, 2); // 2 entradas, 2 salidas
-    originalGenome.addConnection(0, 2);
-    originalGenome.addConnection(1, 3);
+    Genome originalGenome(config, innovationCounter, NUM_INPUTS, NUM_OUTPUTS);
+    originalGenome.addConnection(0, NUM_INPUTS);       // Input 0 -> Output 0
+    originalGenome.addConnection(1, NUM_INPUTS + 1);   // Input 1 -> Output 1
 
-    // Establecer un valor de fitness
-    originalGenome.setFitness(42.0);
+    originalGenome.setFitness(TEST_FITNESS);
 
-    // Guardar el genome en un archivo
-    std::string fileName = "test_genome.txt";
-    originalGenome.save(fileName);
+    originalGenome.save(GENOME_SAVE_FILE);
 
-    // Cargar el genome desde el archivo
     Genome loadedGenome(config, innovationCounter);
-    loadedGenome.load(fileName);
+    loadedGenome.load(GENOME_SAVE_FILE);
 
-    // Verificar atributos importantes
     EXPECT_DOUBLE_EQ(originalGenome.getFitness(), loadedGenome.getFitness());
 
-    // Serializar nodos y conexiones para comparar sus datos
+    // Compare forward pass outputs via serialization
     std::ostringstream originalNodes, loadedNodes;
-    for (const auto& connection : originalGenome.forwardPass({0.0, 1.0})) {
+    for (const auto& connection : originalGenome.forwardPass(FORWARD_PASS_INPUT)) {
         originalNodes << connection;
     }
-    for (const auto& connection : loadedGenome.forwardPass({0.0, 1.0})) {
+    for (const auto& connection : loadedGenome.forwardPass(FORWARD_PASS_INPUT)) {
         loadedNodes << connection;
     }
     EXPECT_EQ(originalNodes.str(), loadedNodes.str());
 
-    // Eliminar el archivo después de la prueba
-    std::remove(fileName.c_str());
+    std::remove(GENOME_SAVE_FILE.c_str());
 }
 
 TEST(GenomeTest, SaveAndLoadEmptyGenome) {
-    // Crear configuraciones e instancias necesarias
     Config config;
     InnovationCounter innovationCounter;
 
-    // Crear un genome vacío
     Genome originalGenome(config, innovationCounter);
 
-    // Guardar el genome en un archivo
-    std::string fileName = "empty_genome.txt";
-    originalGenome.save(fileName);
+    originalGenome.save(EMPTY_GENOME_SAVE_FILE);
 
-    // Cargar el genome desde el archivo
     Genome loadedGenome(config, innovationCounter);
-    loadedGenome.load(fileName);
+    loadedGenome.load(EMPTY_GENOME_SAVE_FILE);
 
-    // Verificar que los atributos sean consistentes
     EXPECT_DOUBLE_EQ(originalGenome.getFitness(), loadedGenome.getFitness());
 
-    // Eliminar el archivo después de la prueba
-    std::remove(fileName.c_str());
+    std::remove(EMPTY_GENOME_SAVE_FILE.c_str());
 }

@@ -38,8 +38,13 @@ double computeSingleColumnR2(const std::vector<std::vector<double>>& predicted,
     return 1.0 - (ssr / sst);
 }
 
+namespace {
+    constexpr double STRICT_TOLERANCE = 1e-12;
+    constexpr double PERFECT_R2 = 1.0;
+}
+
 /**
- * Test 1: Perfect prediction across multiple columns.
+ * Perfect prediction across multiple columns.
  * Each column’s R² = 1. Summation => #columns, then we divide by #columns => 1.0.
  */
 TEST(R2MultiOutputTest, PerfectPrediction) {
@@ -59,13 +64,13 @@ TEST(R2MultiOutputTest, PerfectPrediction) {
 
     // If each column’s R² = 1, sum = 2, then / 2 columns => final = 1
     double score = r2.compute(predictedMatrix, actualMatrix);
-    EXPECT_DOUBLE_EQ(score, 1.0)
+    EXPECT_DOUBLE_EQ(score, PERFECT_R2)
         << "Perfect prediction for all columns should yield R² = 1.0.";
 }
 
 /**
- * Test 2: Slight offset for each column => R² less than 1.
- * We'll manually compute column-wise R², sum them, then /2 columns.
+ * Slight offset for each column => R² less than 1.
+ * Manually compute column-wise R², sum them, then / #columns.
  */
 TEST(R2MultiOutputTest, PartialOffsetMultipleColumns) {
     R2 r2;
@@ -95,12 +100,12 @@ TEST(R2MultiOutputTest, PartialOffsetMultipleColumns) {
     double expectedScore = (r2col0 + r2col1) / 2.0;
 
     double score = r2.compute(predictedMatrix, actualMatrix);
-    EXPECT_NEAR(score, expectedScore, 1e-12)
+    EXPECT_NEAR(score, expectedScore, STRICT_TOLERANCE)
         << "R² for multi-column data should match the manual column-by-column calculation.";
 }
 
 /**
- * Test 3: Very poor prediction => each column’s R² might be negative.
+ * Very poor prediction => each column's R² might be negative.
  * We verify that the final average can also be negative.
  */
 TEST(R2MultiOutputTest, NegativeR2Example) {

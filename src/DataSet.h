@@ -2,8 +2,8 @@
 // Created by tar87 on 20/12/2024.
 //
 
-#ifndef UWU_LEARNER_DATASET_H
-#define UWU_LEARNER_DATASET_H
+#ifndef NEURAL_CORE_DATASET_H
+#define NEURAL_CORE_DATASET_H
 
 #include "MathUtils/Matrix.h"
 #include <vector>
@@ -29,4 +29,4 @@ public:
     [[nodiscard]] int getItems() const;
 };
 
-#endif //UWU_LEARNER_DATASET_H
+#endif //NEURAL_CORE_DATASET_H

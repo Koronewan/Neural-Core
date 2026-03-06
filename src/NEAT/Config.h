@@ -2,8 +2,8 @@
 // Created by korone on 1/13/25.
 //
 
-#ifndef UWU_LEARNER_CONFIG_H
-#define UWU_LEARNER_CONFIG_H
+#ifndef NEURAL_CORE_CONFIG_H
+#define NEURAL_CORE_CONFIG_H
 
 class Config
 {
@@ -43,4 +43,4 @@ public:
     ~Config() = default;
 };
 
-#endif //UWU_LEARNER_CONFIG_H
+#endif //NEURAL_CORE_CONFIG_H

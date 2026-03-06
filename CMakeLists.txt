@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.10)
 
-project(UwU_Learner)
+project(NeuralCore)
 
 # Enable sanitizers for debug builds
 if(CMAKE_BUILD_TYPE STREQUAL "Debug")
@@ -8,6 +8,13 @@ if(CMAKE_BUILD_TYPE STREQUAL "Debug")
     set(SANITIZER_FLAGS "-fsanitize=address,undefined -fno-omit-frame-pointer -g")
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${SANITIZER_FLAGS}")
     set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${SANITIZER_FLAGS}")
+endif()
+
+# Valgrind build type: debug info, no sanitizers (ASan is incompatible with Valgrind)
+if(CMAKE_BUILD_TYPE STREQUAL "Valgrind")
+    message(STATUS "Enabling Valgrind-compatible build (debug info, no sanitizers)")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g -O0")
+    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -g -O0")
 endif()
 
 # Enable gprof profiler for profiling builds
@@ -26,25 +33,48 @@ if(CMAKE_BUILD_TYPE STREQUAL "Release")
     set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${OPTIMIZATION_FLAGS}")
 endif()
 
-set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
-
-# Enable OpenMP if available
-find_package(OpenMP REQUIRED)
-if(OpenMP_CXX_FOUND)
-    message(STATUS "OpenMP found. Enabling OpenMP support.")
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${OpenMP_CXX_FLAGS}")
-    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${OpenMP_C_FLAGS}")
-else()
-    message(WARNING "OpenMP not found. The project will compile without parallelization.")
-endif()
 
 include_directories(src)
 
+# Valgrind memcheck support
+find_program(VALGRIND "valgrind")
+if(VALGRIND)
+    message(STATUS "Valgrind found: ${VALGRIND}")
+    set(MEMORYCHECK_COMMAND ${VALGRIND})
+    set(MEMORYCHECK_COMMAND_OPTIONS "--trace-children=yes --leak-check=full --show-leak-kinds=all --error-exitcode=1")
+    include(CTest)
+else()
+    message(STATUS "Valgrind not found — memcheck target will not be available")
+    enable_testing()
+endif()
+
 add_subdirectory(src)
 add_subdirectory(tests)
-add_subdirectory(lib/googletest)
-#add_subdirectory(lib/Arcade-Learning-Environment-0.6.1)
+
+# Use local lib/googletest if present, otherwise fetch it
+if(EXISTS ${CMAKE_SOURCE_DIR}/lib/googletest/CMakeLists.txt)
+    add_subdirectory(lib/googletest)
+else()
+    include(FetchContent)
+    FetchContent_Declare(
+        googletest
+        GIT_REPOSITORY https://github.com/google/googletest.git
+        GIT_TAG        v1.15.2
+    )
+    FetchContent_MakeAvailable(googletest)
+endif()
+
+# Custom target for convenient 'make valgrind_check'
+if(VALGRIND)
+    add_custom_target(valgrind_check
+        COMMAND ${CMAKE_CTEST_COMMAND} -T memcheck --output-on-failure
+        WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
+        DEPENDS ${CMAKE_PROJECT_NAME}_tests
+        COMMENT "Running tests under Valgrind..."
+    )
+endif()
 
 # Add additional flags for debug builds
 set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -Wall -Wextra -Wpedantic")

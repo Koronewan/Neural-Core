@@ -2,8 +2,8 @@
 // Created by korone on 1/11/25.
 //
 
-#ifndef UWU_LEARNER_MATRIX_H
-#define UWU_LEARNER_MATRIX_H
+#ifndef NEURAL_CORE_MATRIX_H
+#define NEURAL_CORE_MATRIX_H
 
 #include "Vector.h"
 
@@ -31,8 +31,6 @@ public:
     Matrix operator^(const double &value) const;
     Matrix operator/(const Matrix& other) const;
     void iterate(const std::function<double(double)> &func);
-    void saveToBinary(std::ofstream &file) const;
-    void loadFromBinary(std::ifstream &file);
 
     void push_back(const uwu::Vector& vector);
     void fill( double value);
@@ -104,4 +102,4 @@ public:
     friend class uwu::Vector;
 };
 
-#endif //UWU_LEARNER_MATRIX_H
+#endif //NEURAL_CORE_MATRIX_H

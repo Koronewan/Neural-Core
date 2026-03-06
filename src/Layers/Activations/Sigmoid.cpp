@@ -16,7 +16,7 @@ void Sigmoid::derivative(uwu::Vector &output)
 {
     output.iterate([&](double value)
     {
-        double sigmoid = 1.0 / (1.0 + std::exp(value));
+        double sigmoid = 1.0 / (1.0 + std::exp(-value));
         return sigmoid * (1.0 - sigmoid);
     });
 }

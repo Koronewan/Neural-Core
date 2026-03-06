@@ -2,8 +2,8 @@
 // Created by korone on 1/9/25.
 //
 
-#ifndef UWU_LEARNER_HEINITIALIZER_H
-#define UWU_LEARNER_HEINITIALIZER_H
+#ifndef NEURAL_CORE_HEINITIALIZER_H
+#define NEURAL_CORE_HEINITIALIZER_H
 #include "InterfaceInitializer.h"
 #include <vector>
 
@@ -14,4 +14,4 @@ public:
     [[nodiscard]] HeInitializer* clone() const override;
 };
 
-#endif //UWU_LEARNER_HEINITIALIZER_H
+#endif //NEURAL_CORE_HEINITIALIZER_H

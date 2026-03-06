@@ -2,8 +2,8 @@
 // Created by korone on 1/13/25.
 //
 
-#ifndef UWU_LEARNER_NODE_H
-#define UWU_LEARNER_NODE_H
+#ifndef NEURAL_CORE_NODE_H
+#define NEURAL_CORE_NODE_H
 
 #include <string>
 #include <sstream>
@@ -33,4 +33,4 @@ struct Node
 
 
 
-#endif //UWU_LEARNER_NODE_H
+#endif //NEURAL_CORE_NODE_H

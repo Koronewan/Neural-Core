@@ -6,6 +6,7 @@
 #include <random>
 #include <algorithm>
 #include <sstream>
+#include <cmath>
 
 DataSet::DataSet(const std::vector<std::vector<double>> &features, const std::vector<std::vector<double>> &labels)
 {
@@ -59,7 +60,7 @@ void DataSet::normalize(double val)
 
 std::pair<DataSet, DataSet> DataSet::split(double ratio) const
 {
-    const int leftSize = this->items_ - static_cast<int>(static_cast<double>(this->items_) * ratio);
+    const int leftSize = static_cast<int>(std::round(this->items_ * ratio));
 
     std::vector<std::vector<double>> leftFeatures(leftSize);
     std::vector<std::vector<double>> leftLabels(leftSize);
